@@ -80,19 +80,21 @@
   }
 
   .nav-wordmark {
-    font-family: var(--sans);
-    font-size: 13px;
-    font-weight: 400;
     color: var(--ink);
     text-decoration: none;
-    padding-right: 28px;
+    padding-right: 24px;
     margin-right: 8px;
     border-right: 1px solid var(--border);
-    white-space: nowrap;
     flex-shrink: 0;
+    display: flex;
+    align-items: center;
   }
 
-  .nav-wordmark span { color: var(--ink-30); font-weight: 300; }
+  .nav-wordmark img {
+    display: block;
+    height: 20px;
+    width: auto;
+  }
 
   .nav-tabs { display: flex; align-items: stretch; height: 100%; }
 
@@ -548,7 +550,9 @@
 
   <nav class="nav">
     <div class="nav-inner">
-      <a class="nav-wordmark" href="#">Spotnana <span>AI Travel</span></a>
+      <a class="nav-wordmark" href="#" aria-label="Spotnana">
+        <img src="assets/spotnana-primary.svg" alt="Spotnana">
+      </a>
       <div class="nav-tabs">
         <label for="tab-home">Home</label>
         <label for="tab-traveler">Traveler</label>
