@@ -44,7 +44,6 @@
   #tab-agent:checked    ~ .site #panel-agent,
   #tab-tmc:checked      ~ .site #panel-tmc,
   #tab-admin:checked    ~ .site #panel-admin,
-  #tab-concepts:checked ~ .site #panel-concepts,
   #tab-gallery:checked  ~ .site #panel-gallery { display: block; }
 
   /* Nav tab active state */
@@ -53,7 +52,6 @@
   #tab-agent:checked    ~ .site .nav label[for="tab-agent"],
   #tab-tmc:checked      ~ .site .nav label[for="tab-tmc"],
   #tab-admin:checked    ~ .site .nav label[for="tab-admin"],
-  #tab-concepts:checked ~ .site .nav label[for="tab-concepts"],
   #tab-gallery:checked  ~ .site .nav label[for="tab-gallery"] {
     color: var(--ink);
     font-weight: 500;
@@ -543,7 +541,6 @@
 <input class="tab-radio" type="radio" name="tabs" id="tab-agent">
 <input class="tab-radio" type="radio" name="tabs" id="tab-tmc">
 <input class="tab-radio" type="radio" name="tabs" id="tab-admin">
-<input class="tab-radio" type="radio" name="tabs" id="tab-concepts">
 <input class="tab-radio" type="radio" name="tabs" id="tab-gallery">
 
 <div class="site">
@@ -559,7 +556,6 @@
         <label for="tab-agent">Agent</label>
         <label for="tab-tmc">TMC</label>
         <label for="tab-admin">Admin</label>
-        <label for="tab-concepts">Concepts</label>
         <label for="tab-gallery">Gallery</label>
       </div>
     </div>
@@ -570,12 +566,12 @@
     <div class="header">
       <span class="eyebrow">UX &amp; Design implications, 2026</span>
       <h1>Travel at the speed of conversation</h1>
-      <p class="lead">AI doesn't eliminate the interface. It transforms it. Screen-based flows give way to voice, conversation, and ambient awareness. The design challenge shifts from building better forms to building appropriate trust, transparency, and control into systems that increasingly speak, listen, and act on your behalf.</p>
+      <p class="lead">AI changes what the interface is for. Instead of optimizing long booking flows, we can design review surfaces, conversational inputs, calm status layers, and clear override patterns. The goal is not abstract automation. The goal is faster understanding, better decisions, and more confident action.</p>
     </div>
 
     <div class="stat-row">
       <div class="stat"><div class="stat-num">0<em>.</em>0</div><div class="stat-desc">Screens touched for a routine domestic booking in the AI-native model</div></div>
-      <div class="stat"><div class="stat-num">4<em>x</em></div><div class="stat-desc">Personas whose work fundamentally transforms: traveler, agent, TMC, admin</div></div>
+      <div class="stat"><div class="stat-num">4<em>x</em></div><div class="stat-desc">Core surfaces to redesign around AI behavior: traveler, agent, TMC, admin</div></div>
       <div class="stat"><div class="stat-num">1<em>+</em></div><div class="stat-desc">Single confirmation replaces the average 14-step booking flow</div></div>
     </div>
 
@@ -609,7 +605,7 @@
     <div class="card card-dark">
       <span class="card-label">The core tension</span>
       <h2>Autonomy vs. agency</h2>
-      <p>The central design question of AI-native travel isn't "how do we make booking faster." It's: how much should the system do without asking? The answer is different for every persona, every trip type, and every company policy. The best interfaces will be those that let each user calibrate their own comfort level, trusting the system to respect it consistently.</p>
+      <p>The central design question is not how to automate more. It is when to act, when to ask, and how to explain the tradeoff. Good design gives users adjustable autonomy, visible reasoning, and a safe path to intervene without starting over.</p>
       <div class="chips" style="margin-top:18px"><span class="chip chip-red">Configurable autonomy</span><span class="chip chip-red">Trust as a design material</span><span class="chip chip-teal">Context-sensitive defaults</span><span class="chip chip-blue">Reversibility at every step</span></div>
     </div>
   </div>
@@ -619,7 +615,7 @@
     <div class="header">
       <span class="eyebrow">Traveler perspective</span>
       <h1>The AI-native business trip</h1>
-      <p class="lead">From intent to expensed. No portals, no searching, no friction. A single agent that knows your preferences, your policy, and your calendar.</p>
+      <p class="lead">A design vision for the traveler surface: fewer search steps, better defaults, and clearer moments of confirmation. The desired outcome is not “magic.” It is a trip flow that feels legible, low-effort, and easy to correct.</p>
     </div>
 
     <div class="card"><span class="card-label">Phase 01: Intent detected</span><h2>The AI knows before you ask</h2><p>A meeting invite lands for a client in Chicago next Thursday. The AI reads your calendar, cross-references your company travel policy, checks your loyalty status, scans weather and disruption patterns on ORD routes, and surfaces a proposed itinerary before you've thought to open a booking tool.</p><div class="bubble"><span class="bubble-label">Agent message</span><p>"You have an 8am client meeting Thursday at Willis Tower. I've drafted an itinerary: UA 492 departing 6:05am (aisle, economy plus, within policy), Hyatt Regency on the Riverwalk (preferred vendor, $189, $11 under cap). Confirm to book both."</p></div><div class="chips"><span class="chip chip-red">Calendar awareness</span><span class="chip chip-red">Policy enforcement</span><span class="chip chip-red">Proactive draft</span></div></div>
@@ -637,9 +633,9 @@
     </div>
 
     <div class="card card-dark">
-      <span class="card-label">The deeper shift</span>
-      <h2>From tool to agent to traveling partner</h2>
-      <p>The real change isn't that booking gets faster. It's that the traveler stops being the system integrator. Today you are the glue between the airline app, hotel site, ride-hail app, expense tool, and your manager's approval email. In the AI-native future, a single agent holds all of that context and executes across all of those surfaces. You just travel.</p>
+      <span class="card-label">Desired outcome</span>
+      <h2>One coherent trip surface</h2>
+      <p>Today the traveler stitches together fragmented tools. A stronger design outcome is a single surface that carries trip context across booking, disruption, ground transport, and expense. We can build parts of this now with shared state, proactive summaries, and better exception design. Future work is making that orchestration feel natural across voice, messaging, and screen UI.</p>
       <div class="chips" style="margin-top:18px"><span class="chip chip-red">Persistent traveler context</span><span class="chip chip-red">Cross-vendor orchestration</span><span class="chip chip-teal">Policy as guardrails, not gates</span><span class="chip chip-blue">Zero-UI for routine trips</span></div>
     </div>
   </div>
@@ -648,18 +644,18 @@
   <div class="panel" id="panel-agent">
     <div class="header">
       <span class="eyebrow">Agent perspective</span>
-      <h1>From booking clerk to travel orchestrator</h1>
-      <p class="lead">AI doesn't replace the travel agent. It eliminates the work agents hate and amplifies the work they're actually good at. The role shifts from transaction processor to exception handler and trusted advisor.</p>
+      <h1>Designing for agent judgment</h1>
+      <p class="lead">This section should be read as an interface problem, not a workforce prediction. If routine tasks are automated, the agent surface should optimize for triage, context handoff, and high-confidence intervention.</p>
     </div>
 
     <div class="section-block">
       <span class="section-label">What the work looks like</span>
-      <div class="section-title">The transaction layer disappears</div>
-      <p class="section-sub">Today, 70% of agent time is consumed by routine bookings any AI could handle. That time collapses. What remains is genuinely complex, high-value, and human.</p>
+      <div class="section-title">Move agents out of booking forms</div>
+      <p class="section-sub">The most useful near-term design outcome is simple: reduce repetitive form work and concentrate attention on decisions that need judgment. That means queues, summaries, recommended actions, and fast intervention patterns.</p>
       <div class="grid-3">
         <div class="card"><span class="card-label">Before AI</span><h3>High-volume, low-judgment work</h3><p>Responding to booking requests, searching inventory, applying policy, sending confirmation emails, chasing receipts. Repetitive and not why agents got into the business.</p><div class="chips"><span class="chip chip-ink">Search &amp; book</span><span class="chip chip-ink">Policy lookup</span><span class="chip chip-ink">Confirmation emails</span></div></div>
         <div class="card"><span class="card-label">After AI</span><h3>Exception handling and escalation</h3><p>The AI handles the routine. Agents receive a curated queue of situations that genuinely need human judgment: a stranded traveler, a VIP reroute, a policy exception that needs a conversation.</p><div class="chips"><span class="chip chip-red">Exception queue</span><span class="chip chip-red">VIP management</span><span class="chip chip-red">Reroute orchestration</span></div></div>
-        <div class="card"><span class="card-label">New opportunities</span><h3>Advisory and relationship work</h3><p>With routine work offloaded, agents invest in the advisory layer: understanding client travel patterns, proactively recommending program changes, building relationships automation cannot replicate.</p><div class="chips"><span class="chip chip-teal">Travel advisory</span><span class="chip chip-teal">Program optimization</span></div></div>
+        <div class="card"><span class="card-label">Design opportunity</span><h3>Recommendation and intervention tools</h3><p>We can design agent tools that surface patterns, draft responses, and package context for better human decisions. The desired outcome is faster resolution with less hunting, not a vague promise of “advisory.”</p><div class="chips"><span class="chip chip-teal">Decision support</span><span class="chip chip-teal">Pattern detection</span></div></div>
       </div>
     </div>
 
@@ -674,24 +670,24 @@
       </div>
     </div>
 
-    <div class="card card-dark"><span class="card-label">The new agent value proposition</span><h2>Judgment at scale</h2><p>The travel agent of the AI era is a quality control layer for a system that handles millions of routine decisions perfectly but occasionally needs a human to exercise judgment, compassion, and creative problem-solving. That's a more skilled job, not a diminished one.</p><div class="chips" style="margin-top:18px"><span class="chip chip-red">Human judgment at edge cases</span><span class="chip chip-teal">Empathy and communication</span><span class="chip chip-blue">Strategic advisory</span><span class="chip chip-amber">Creative problem-solving</span></div></div>
+    <div class="card card-dark"><span class="card-label">Desired outcome</span><h2>Judgment in context</h2><p>The agent UI should help a person understand the situation quickly, trust the system's prior work, and act without reassembling the case from scratch. That is something we can design today with better summaries, action scaffolds, and audit visibility.</p><div class="chips" style="margin-top:18px"><span class="chip chip-red">Human judgment at edge cases</span><span class="chip chip-teal">Context packaging</span><span class="chip chip-blue">Visible system history</span><span class="chip chip-amber">Fast intervention</span></div></div>
   </div>
 
   <!-- ══ TMC ══ -->
   <div class="panel" id="panel-tmc">
     <div class="header">
       <span class="eyebrow">TMC perspective</span>
-      <h1>A new service layer emerges</h1>
-      <p class="lead">When AI handles the transactional work, TMCs face an existential question: what is our value now? The answer is a move up the stack, toward strategy, duty of care, analytics, and the things that require organizational context an individual AI agent cannot have.</p>
+      <h1>Designing the program layer</h1>
+      <p class="lead">The TMC opportunity here is product design: better dashboards, better policy tools, and better crisis surfaces. The desired outcome is a control plane for a travel program, not just a better booking interface.</p>
     </div>
 
     <div class="section-block">
-      <span class="section-label">The business model shift</span>
-      <div class="section-title">From transaction fees to advisory retainers</div>
-      <p class="section-sub">Traditional TMC revenue is tied to booking volume. AI commoditizes that layer. The durable value moves to program design, compliance consulting, and managed services that require deep client knowledge.</p>
+      <span class="section-label">What to design now</span>
+      <div class="section-title">Program visibility and control</div>
+      <p class="section-sub">The practical opportunity is to design tools clients would use every week: program health dashboards, policy simulators, disruption command centers, and recommendation systems tied to clear actions.</p>
       <div class="grid-2">
-        <div class="card"><span class="card-label">Value eroding</span><h3>Transactional services</h3><p>Booking air, hotel, and ground. Processing expenses. Running approval workflows. Managing itinerary changes. All of this becomes table stakes, expected to be fast, automatic, and invisible. Margin compresses to zero.</p><div class="chips"><span class="chip chip-ink">Booking &amp; fulfillment</span><span class="chip chip-ink">Change management</span><span class="chip chip-ink">Basic reporting</span></div></div>
-        <div class="card"><span class="card-label">Value growing</span><h3>Strategic managed services</h3><p>Program design and optimization. Supplier negotiation with AI-generated spend analysis. Duty of care. Sustainability reporting. Policy consulting. Things that require client relationships and industry expertise. Not search algorithms.</p><div class="chips"><span class="chip chip-red">Program management</span><span class="chip chip-red">Supplier strategy</span><span class="chip chip-red">Duty of care</span></div></div>
+        <div class="card"><span class="card-label">Available now</span><h3>Operational control surfaces</h3><p>Booking, changes, approvals, and reporting can already be redesigned as faster system views with automation wrapped in clearer monitoring and exception controls.</p><div class="chips"><span class="chip chip-ink">Booking oversight</span><span class="chip chip-ink">Change management</span><span class="chip chip-ink">Operational reporting</span></div></div>
+        <div class="card"><span class="card-label">Next to invent</span><h3>Program intelligence tools</h3><p>The future-facing opportunity is richer decision support: policy tuning, supplier recommendations, scenario modeling, and duty-of-care interfaces that help teams act on system insight instead of just reading reports.</p><div class="chips"><span class="chip chip-red">Program management</span><span class="chip chip-red">Scenario modeling</span><span class="chip chip-red">Duty of care</span></div></div>
       </div>
     </div>
 
@@ -706,7 +702,7 @@
       </div>
     </div>
 
-    <div class="card card-dark"><span class="card-label">Strategic imperative</span><h2>Build the layer AI cannot replicate</h2><p>The TMCs that survive the AI transition will be those that invest aggressively in services requiring organizational memory, supplier relationships, and human accountability. AI can optimize a booking in milliseconds. It cannot renegotiate an airline partnership, navigate a duty of care crisis across 200 stranded travelers, or advise a CFO on their global travel program restructure.</p><div class="chips" style="margin-top:18px"><span class="chip chip-red">Supplier relationship capital</span><span class="chip chip-teal">Organizational memory</span><span class="chip chip-blue">Human accountability</span><span class="chip chip-amber">Executive advisory</span></div></div>
+    <div class="card card-dark"><span class="card-label">Desired outcome</span><h2>A better control plane for travel programs</h2><p>The design goal is a product layer that helps organizations understand risk, tune policy, and coordinate response. Some of that is achievable now with stronger dashboards and simulations. Some of it will require inventing new interfaces for system-level oversight.</p><div class="chips" style="margin-top:18px"><span class="chip chip-red">Program visibility</span><span class="chip chip-teal">Organizational memory</span><span class="chip chip-blue">Human accountability</span><span class="chip chip-amber">System-level oversight</span></div></div>
   </div>
 
   <!-- ══ ADMIN ══ -->
@@ -714,13 +710,13 @@
     <div class="header">
       <span class="eyebrow">Admin &amp; EA perspective</span>
       <h1>Policy that enforces itself</h1>
-      <p class="lead">Administrative assistants and travel managers have spent years as the human middleware between travelers and travel policy. AI collapses that role, shifting its focus from execution to strategy and exception handling.</p>
+      <p class="lead">This is really a design problem about policy, preference, and oversight. The opportunity is to reduce manual coordination and replace it with interfaces that make rules, exceptions, and traveler wellbeing easier to see and manage.</p>
     </div>
 
     <div class="section-block">
       <span class="section-label">The EA role reimagined</span>
-      <div class="section-title">From booking coordinator to travel strategist</div>
-      <p class="section-sub">The best executive assistants aren't prized for their ability to navigate Concur. They're prized for judgment, relationship management, and knowing their executive's preferences before being asked. AI handles the former; the latter becomes more valuable than ever.</p>
+      <div class="section-title">From manual coordination to preference systems</div>
+      <p class="section-sub">The design opportunity is not to glorify strategy work. It is to capture preferences, approvals, and edge cases in ways that make future trips easier to review, adjust, and trust.</p>
       <div class="grid-3">
         <div class="card"><span class="card-label">Work that disappears</span><h3>Booking and logistics</h3><p>Searching flights, comparing hotel options, managing approval chains, processing expense reports, sending itineraries. This is the work that consumes most of an EA's travel-related time today. The AI does all of it.</p><div class="chips"><span class="chip chip-ink">Search &amp; book</span><span class="chip chip-ink">Approvals</span><span class="chip chip-ink">Expense processing</span></div></div>
         <div class="card"><span class="card-label">Work that remains</span><h3>Judgment and preferences</h3><p>Knowing the executive prefers an aisle seat on the left side of a 737. Knowing they never take the 6am flight before a board meeting. This institutional knowledge feeds the AI, but the EA is the one who holds and curates it.</p><div class="chips"><span class="chip chip-amber">Preference curation</span><span class="chip chip-amber">Context management</span><span class="chip chip-amber">AI supervision</span></div></div>
@@ -730,8 +726,8 @@
 
     <div class="section-block">
       <span class="section-label">The travel manager role</span>
-      <div class="section-title">From gatekeeper to program architect</div>
-      <p class="section-sub">Corporate travel managers traditionally spend significant time on individual approvals and firefighting. AI enforcement of policy in real time eliminates that work and frees the travel manager to focus on program design.</p>
+      <div class="section-title">From approval bottlenecks to policy tooling</div>
+      <p class="section-sub">A strong outcome for travel managers is fewer one-off approvals and better interfaces for shaping policy behavior. The more clearly the system explains exceptions and outcomes, the less manual review it should require.</p>
       <div class="card"><span class="card-label">Interface shift 01</span><h2>The policy console</h2><p>Travel policy moves from a static document to a living ruleset. The travel manager's primary interface is a policy configuration tool that lets them define rules in plain language, simulate the spend and compliance impact of changes before publishing, and see in real time where exceptions are occurring and why.</p><div class="bubble"><span class="bubble-label">Policy insight</span><p>"Your $189 NYC hotel cap generated 47 policy exceptions last month, 31 of which were approved. Average exception spend was $218. Raising the cap to $215 would bring 28 of those exceptions into compliance and save 3.2 hours of approval processing time."</p></div><div class="chips"><span class="chip chip-blue">Policy simulation</span><span class="chip chip-blue">Exception analytics</span><span class="chip chip-blue">Approval automation</span></div></div>
       <div class="grid-2">
         <div class="card"><span class="card-label">Interface shift 02</span><h3>Spend forecasting</h3><p>AI can predict travel spend 90 days out based on calendar density, booked trips, and historical patterns. Travel managers can manage budget proactively rather than reporting on actuals after it's spent.</p><div class="chips"><span class="chip chip-teal">Predictive spend</span><span class="chip chip-teal">Budget management</span></div></div>
@@ -739,43 +735,7 @@
       </div>
     </div>
 
-    <div class="card card-dark"><span class="card-label">The core shift</span><h2>From approval chain to trust architecture</h2><p>The traditional travel approval workflow exists because humans need checkpoints to enforce policy. When AI enforces policy in real time, the approval chain becomes largely redundant. What replaces it is a trust architecture: clear rules, transparent AI reasoning, well-designed exception flows, and audit trails that give management the confidence to let the system run.</p><div class="chips" style="margin-top:18px"><span class="chip chip-red">Policy as code</span><span class="chip chip-teal">Transparent AI reasoning</span><span class="chip chip-blue">Audit and accountability</span><span class="chip chip-amber">Configurable autonomy levels</span></div></div>
-  </div>
-
-  <!-- ══ CONCEPTS ══ -->
-  <div class="panel" id="panel-concepts">
-    <div class="header">
-      <span class="eyebrow">Shipping &amp; concept review</span>
-      <h1>One narrative, one working gallery</h1>
-      <p class="lead">The weekly design gallery now lives inside this deck so the story, explorations, and supporting work can be reviewed in a single file without breaking the flow.</p>
-    </div>
-
-    <div class="grid-2">
-      <div class="card">
-        <span class="card-label">What changed</span>
-        <h2>The gallery is now embedded</h2>
-        <p>Instead of opening a separate page, the full BLR shipping gallery now sits behind its own top-level tab. Reviewers can move from the AI-native travel narrative into artifacts and shipped explorations without context switching.</p>
-        <div class="chips"><span class="chip chip-red">Single-file review</span><span class="chip chip-teal">In-context artifacts</span><span class="chip chip-blue">No external navigation</span></div>
-      </div>
-      <div class="card card-dark">
-        <span class="card-label">Included this week</span>
-        <h2>27 design items from BLR</h2>
-        <p>The merged gallery preserves the existing lightbox, keyboard navigation, and image metadata while keeping the Spotnana editorial framing intact.</p>
-        <div class="chips" style="margin-top:18px"><span class="chip chip-red">High-fidelity screens</span><span class="chip chip-teal">Lightbox browsing</span><span class="chip chip-blue">Single source file</span></div>
-      </div>
-    </div>
-
-    <div class="card" style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;">
-      <div>
-        <span class="card-label">Next tab</span>
-        <h2>Open the weekly gallery</h2>
-        <p>The new gallery tab keeps everything local to this document while preserving the original browsing experience.</p>
-      </div>
-      <label for="tab-gallery" style="display:inline-flex;align-items:center;gap:10px;background:#0D0D0D;color:#fff;border-radius:999px;padding:14px 28px;font-family:var(--sans);font-size:14px;font-weight:400;cursor:pointer;">
-        View Gallery
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M1 11L11 1M11 1H4M11 1V8" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </label>
-    </div>
+    <div class="card card-dark"><span class="card-label">Desired outcome</span><h2>Replace approval chains with better policy UX</h2><p>Approval chains are often a workaround for weak policy interfaces. A stronger future state is explicit rules, visible reasoning, targeted escalation, and auditability built into the product. Much of that can be designed today. The harder invention work is making those controls feel understandable instead of bureaucratic.</p><div class="chips" style="margin-top:18px"><span class="chip chip-red">Policy as code</span><span class="chip chip-teal">Transparent AI reasoning</span><span class="chip chip-blue">Audit and accountability</span><span class="chip chip-amber">Configurable autonomy levels</span></div></div>
   </div>
 
   <!-- ══ GALLERY ══ -->
