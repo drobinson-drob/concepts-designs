@@ -8,6 +8,10 @@ This repository contains standalone HTML concept explorations and design prototy
   - Root entrypoint for static hosting.
   - Redirects to the main Spotnana concept deck and provides fallback links.
 
+- `vercel.json`
+  - Explicit static routing for Vercel deployment.
+  - Maps `/` to `index.html` and lets filesystem routes handle the rest.
+
 - `spotnana_ai_travel.html`
   - Primary concept deck for AI-native travel.
   - Uses the Spotnana logo in the header.
