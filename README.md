@@ -7,7 +7,7 @@ This repository contains standalone HTML concept explorations and design prototy
 - `spotnana_ai_travel.html`
   - Primary concept deck for AI-native travel.
   - Uses the Spotnana logo in the header.
-  - Includes the embedded `Gallery` tab and in-page lightbox.
+  - Includes embedded `Roadmap` and `Gallery` tabs plus an in-page lightbox.
   - Focuses on UI/UX design outcomes, near-term design opportunities, and future interface concepts.
 
 ## Supporting Files

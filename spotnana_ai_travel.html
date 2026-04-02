@@ -44,6 +44,7 @@
   #tab-agent:checked    ~ .site #panel-agent,
   #tab-tmc:checked      ~ .site #panel-tmc,
   #tab-admin:checked    ~ .site #panel-admin,
+  #tab-roadmap:checked  ~ .site #panel-roadmap,
   #tab-gallery:checked  ~ .site #panel-gallery { display: block; }
 
   /* Nav tab active state */
@@ -52,6 +53,7 @@
   #tab-agent:checked    ~ .site .nav label[for="tab-agent"],
   #tab-tmc:checked      ~ .site .nav label[for="tab-tmc"],
   #tab-admin:checked    ~ .site .nav label[for="tab-admin"],
+  #tab-roadmap:checked  ~ .site .nav label[for="tab-roadmap"],
   #tab-gallery:checked  ~ .site .nav label[for="tab-gallery"] {
     color: var(--ink);
     font-weight: 500;
@@ -435,6 +437,114 @@
   letter-spacing: 0.03em;
   line-height: 1.4;
 }
+
+.roadmap-quarter {
+  margin-bottom: 88px;
+}
+
+.roadmap-quarter:last-child {
+  margin-bottom: 0;
+}
+
+.roadmap-kicker {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 22px;
+  flex-wrap: wrap;
+}
+
+.roadmap-kicker .section-title {
+  margin-bottom: 0;
+}
+
+.roadmap-chipline {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.sprint-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.sprint-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 28px 30px;
+}
+
+.sprint-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.sprint-tag {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--red);
+}
+
+.sprint-window {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-30);
+}
+
+.sprint-card h3 {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 28px;
+  font-weight: 400;
+  line-height: 1.1;
+  margin-bottom: 10px;
+}
+
+.sprint-summary {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--ink-60);
+  margin-bottom: 18px;
+}
+
+.viz-list {
+  display: grid;
+  gap: 12px;
+}
+
+.viz-item {
+  padding-top: 12px;
+  border-top: 1px solid #ECE9E2;
+}
+
+.viz-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-30);
+  display: block;
+  margin-bottom: 6px;
+}
+
+.viz-item p {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--ink-60);
+}
+
 #lightbox {
   display: none;
   position: fixed;
@@ -528,7 +638,7 @@
   color: rgba(255,255,255,0.2);
   letter-spacing: 0.08em;
 }
-@media (max-width: 900px) { #panel-gallery .grid { grid-template-columns: repeat(3,1fr); } }
+@media (max-width: 900px) { #panel-gallery .grid { grid-template-columns: repeat(3,1fr); } .sprint-grid { grid-template-columns: 1fr; } }
 @media (max-width: 600px) { #panel-gallery .grid { grid-template-columns: repeat(2,1fr); } }
 
 </style>
@@ -541,6 +651,7 @@
 <input class="tab-radio" type="radio" name="tabs" id="tab-agent">
 <input class="tab-radio" type="radio" name="tabs" id="tab-tmc">
 <input class="tab-radio" type="radio" name="tabs" id="tab-admin">
+<input class="tab-radio" type="radio" name="tabs" id="tab-roadmap">
 <input class="tab-radio" type="radio" name="tabs" id="tab-gallery">
 
 <div class="site">
@@ -556,6 +667,7 @@
         <label for="tab-agent">Agent</label>
         <label for="tab-tmc">TMC</label>
         <label for="tab-admin">Admin</label>
+        <label for="tab-roadmap">Roadmap</label>
         <label for="tab-gallery">Gallery</label>
       </div>
     </div>
@@ -736,6 +848,107 @@
     </div>
 
     <div class="card card-dark"><span class="card-label">Desired outcome</span><h2>Replace approval chains with better policy UX</h2><p>Approval chains are often a workaround for weak policy interfaces. A stronger future state is explicit rules, visible reasoning, targeted escalation, and auditability built into the product. Much of that can be designed today. The harder invention work is making those controls feel understandable instead of bureaucratic.</p><div class="chips" style="margin-top:18px"><span class="chip chip-red">Policy as code</span><span class="chip chip-teal">Transparent AI reasoning</span><span class="chip chip-blue">Audit and accountability</span><span class="chip chip-amber">Configurable autonomy levels</span></div></div>
+  </div>
+
+  <!-- ══ ROADMAP ══ -->
+  <div class="panel" id="panel-roadmap">
+    <div class="header">
+      <span class="eyebrow">Execution plan</span>
+      <h1>Traveler AI Roadmap</h1>
+      <p class="lead">A four-quarter UI/UX roadmap for a traveler AI experience. Each sprint is framed around interfaces we can ship, outcomes we can measure, and product surfaces we should explicitly defer until the foundation is strong.</p>
+    </div>
+
+    <div class="roadmap-quarter">
+      <div class="roadmap-kicker">
+        <div>
+          <span class="section-label">Quarter 01</span>
+          <div class="section-title">Trip proposal MVP</div>
+        </div>
+        <div class="roadmap-chipline">
+          <span class="chip chip-red">Proposal flow</span>
+          <span class="chip chip-blue">Traveler trust</span>
+          <span class="chip chip-teal">Booking confirmation</span>
+        </div>
+      </div>
+      <p class="section-sub">Desired outcome: a traveler can move from intent to confident booking in under two minutes, with enough transparency and control to trust the recommendation.</p>
+      <div class="sprint-grid">
+        <div class="sprint-card"><div class="sprint-meta"><span class="sprint-tag">Sprint 01</span><span class="sprint-window">Weeks 1-2</span></div><h3>Intent Capture</h3><p class="sprint-summary">Define the front door for the traveler AI experience so requests feel structured even when they start conversationally.</p><div class="viz-list"><div class="viz-item"><span class="viz-label">MVP Scope</span><p>Traveler prompt entry, intent parser states, request summary card, and empty/loading/error states.</p></div><div class="viz-item"><span class="viz-label">Success Metrics</span><p>80% of test users can start a trip request without facilitator help and understand what the system captured.</p></div><div class="viz-item"><span class="viz-label">User Stories</span><p>As a traveler, I want to state my trip in plain language and verify the system understood destination, timing, and purpose.</p></div><div class="viz-item"><span class="viz-label">Prioritized Screens</span><p>Intent entry, parsed request review, loading state, request error recovery.</p></div><div class="viz-item"><span class="viz-label">Leave for Phase 2</span><p>Voice capture, multi-turn planning, and calendar editing inside the flow.</p></div></div></div>
+        <div class="sprint-card"><div class="sprint-meta"><span class="sprint-tag">Sprint 02</span><span class="sprint-window">Weeks 3-4</span></div><h3>Proposal Surface</h3><p class="sprint-summary">Turn the AI output into a recommendation UI that feels understandable instead of magical.</p><div class="viz-list"><div class="viz-item"><span class="viz-label">MVP Scope</span><p>Primary itinerary card, hotel recommendation card, pricing summary, policy status, and confidence cues.</p></div><div class="viz-item"><span class="viz-label">Success Metrics</span><p>Users can correctly explain why the top option is recommended in usability review.</p></div><div class="viz-item"><span class="viz-label">User Stories</span><p>As a traveler, I want one clearly recommended option so I do not need to compare ten variants manually.</p></div><div class="viz-item"><span class="viz-label">Prioritized Screens</span><p>Proposal overview, recommendation details, alternative slot, confidence and policy badges.</p></div><div class="viz-item"><span class="viz-label">Leave for Phase 2</span><p>Supplier bundling logic, loyalty optimization, and group trip recommendations.</p></div></div></div>
+        <div class="sprint-card"><div class="sprint-meta"><span class="sprint-tag">Sprint 03</span><span class="sprint-window">Weeks 5-6</span></div><h3>Explainability Layer</h3><p class="sprint-summary">Add enough reasoning to build trust without turning the interface into a wall of system text.</p><div class="viz-list"><div class="viz-item"><span class="viz-label">MVP Scope</span><p>Why this trip panel, matched preferences, policy rules applied, and rejected alternative summaries.</p></div><div class="viz-item"><span class="viz-label">Success Metrics</span><p>Trust score improves in concept testing and override rates drop for policy-compliant proposals.</p></div><div class="viz-item"><span class="viz-label">User Stories</span><p>As a traveler, I want to know why this option was chosen so I can approve quickly.</p></div><div class="viz-item"><span class="viz-label">Prioritized Screens</span><p>Reasoning drawer, policy explanation, preference match details, alternative rationale.</p></div><div class="viz-item"><span class="viz-label">Leave for Phase 2</span><p>Full audit history, model confidence diagnostics, and admin-facing reasoning configuration.</p></div></div></div>
+        <div class="sprint-card"><div class="sprint-meta"><span class="sprint-tag">Sprint 04</span><span class="sprint-window">Weeks 7-8</span></div><h3>Fast Confirmation</h3><p class="sprint-summary">Design the minimal decision flow that lets the traveler accept or adjust the proposal without falling back to old booking funnels.</p><div class="viz-list"><div class="viz-item"><span class="viz-label">MVP Scope</span><p>Approve, edit one constraint, compare two alternatives, and confirm booking with a clear status path.</p></div><div class="viz-item"><span class="viz-label">Success Metrics</span><p>Median concept completion time under two minutes for a routine domestic trip.</p></div><div class="viz-item"><span class="viz-label">User Stories</span><p>As a traveler, I want to make one small change, like seat or timing, without restarting my search.</p></div><div class="viz-item"><span class="viz-label">Prioritized Screens</span><p>Confirmation CTA state, edit constraint modal, compare options view, success state.</p></div><div class="viz-item"><span class="viz-label">Leave for Phase 2</span><p>Full itinerary builder, fare rule edge cases, and multi-city editing.</p></div></div></div>
+        <div class="sprint-card"><div class="sprint-meta"><span class="sprint-tag">Sprint 05</span><span class="sprint-window">Weeks 9-10</span></div><h3>Preference Controls</h3><p class="sprint-summary">Ship lightweight controls that make the system feel controllable and personal.</p><div class="viz-list"><div class="viz-item"><span class="viz-label">MVP Scope</span><p>Seat preference, airline bias, hotel tier preference, autonomy setting, and approval behavior setting.</p></div><div class="viz-item"><span class="viz-label">Success Metrics</span><p>Users can locate and change autonomy or preference settings in under 30 seconds.</p></div><div class="viz-item"><span class="viz-label">User Stories</span><p>As a traveler, I want the system to know my usual preferences and still let me override them easily.</p></div><div class="viz-item"><span class="viz-label">Prioritized Screens</span><p>Preference center, autonomy control, booking rule summary, inline override states.</p></div><div class="viz-item"><span class="viz-label">Leave for Phase 2</span><p>Deep profile editing, loyalty account management, and preference learning visualizations.</p></div></div></div>
+        <div class="sprint-card"><div class="sprint-meta"><span class="sprint-tag">Sprint 06</span><span class="sprint-window">Weeks 11-12</span></div><h3>MVP Hardening</h3><p class="sprint-summary">Package the experience into a coherent release candidate with states, guidance, and instrumentation.</p><div class="viz-list"><div class="viz-item"><span class="viz-label">MVP Scope</span><p>Cross-flow polish, empty states, fallback copy, event instrumentation, and accessibility fixes.</p></div><div class="viz-item"><span class="viz-label">Success Metrics</span><p>Usability score target met, accessibility review closed, and traveler proposal funnel fully instrumented.</p></div><div class="viz-item"><span class="viz-label">User Stories</span><p>As a traveler, I want the experience to feel complete and predictable even when the system cannot help.</p></div><div class="viz-item"><span class="viz-label">Prioritized Screens</span><p>All core states, failure states, help states, and release-ready UI review screens.</p></div><div class="viz-item"><span class="viz-label">Leave for Phase 2</span><p>Agent escalation UI, disruption AI, and cross-device continuity.</p></div></div></div>
+      </div>
+    </div>
+
+    <div class="roadmap-quarter">
+      <div class="roadmap-kicker">
+        <div>
+          <span class="section-label">Quarter 02</span>
+          <div class="section-title">Disruption and recovery</div>
+        </div>
+        <div class="roadmap-chipline">
+          <span class="chip chip-red">Disruption UI</span>
+          <span class="chip chip-blue">Calm status</span>
+          <span class="chip chip-amber">Recovery decisions</span>
+        </div>
+      </div>
+      <p class="section-sub">Desired outcome: when a trip changes, the traveler sees one clear recommendation, one clear explanation, and one clear next action.</p>
+      <div class="sprint-grid">
+        <div class="sprint-card"><div class="sprint-meta"><span class="sprint-tag">Sprint 07</span><span class="sprint-window">Weeks 1-2</span></div><h3>Trip Status Layer</h3><p class="sprint-summary">Introduce a persistent trip status surface that can hold itinerary state, confidence, and alerts.</p><div class="viz-list"><div class="viz-item"><span class="viz-label">MVP Scope</span><p>Trip timeline, status banner, disruption markers, and current recommendation summary.</p></div><div class="viz-item"><span class="viz-label">Success Metrics</span><p>Users can identify what changed and how urgent it is without opening multiple screens.</p></div><div class="viz-item"><span class="viz-label">User Stories</span><p>As a traveler, I want one place to check the state of my trip before and during travel.</p></div><div class="viz-item"><span class="viz-label">Prioritized Screens</span><p>Trip home, live status state, low-risk alert, high-risk alert.</p></div><div class="viz-item"><span class="viz-label">Leave for Phase 2</span><p>Map-heavy views, airport wayfinding, and wearable experiences.</p></div></div></div>
+        <div class="sprint-card"><div class="sprint-meta"><span class="sprint-tag">Sprint 08</span><span class="sprint-window">Weeks 3-4</span></div><h3>Delay Recommendation UI</h3><p class="sprint-summary">Design the first disruption recommendation flow around delays and missed connection risk.</p><div class="viz-list"><div class="viz-item"><span class="viz-label">MVP Scope</span><p>What changed, recommended action, timing impact, and approve/decline controls.</p></div><div class="viz-item"><span class="viz-label">Success Metrics</span><p>Users can explain the recommended recovery path and expected outcome in testing.</p></div><div class="viz-item"><span class="viz-label">User Stories</span><p>As a traveler, I want the system to tell me what it suggests I do when my trip is disrupted.</p></div><div class="viz-item"><span class="viz-label">Prioritized Screens</span><p>Delay alert, recovery proposal, decision state, post-decision confirmation.</p></div><div class="viz-item"><span class="viz-label">Leave for Phase 2</span><p>Automatic rebooking, hotel reaccommodation, and full vendor execution.</p></div></div></div>
+        <div class="sprint-card"><div class="sprint-meta"><span class="sprint-tag">Sprint 09</span><span class="sprint-window">Weeks 5-6</span></div><h3>Notification Design</h3><p class="sprint-summary">Create a calm interruption system so important changes are visible without becoming noisy.</p><div class="viz-list"><div class="viz-item"><span class="viz-label">MVP Scope</span><p>Priority model, push copy hierarchy, passive status patterns, and alert grouping rules.</p></div><div class="viz-item"><span class="viz-label">Success Metrics</span><p>Alert comprehension improves while perceived notification overload stays low in testing.</p></div><div class="viz-item"><span class="viz-label">User Stories</span><p>As a traveler, I want to know when I need to act and when the system is simply monitoring.</p></div><div class="viz-item"><span class="viz-label">Prioritized Screens</span><p>Push notification states, alert center, passive monitoring indicator, dismissed state.</p></div><div class="viz-item"><span class="viz-label">Leave for Phase 2</span><p>Omnichannel notification orchestration and smart wearable escalation.</p></div></div></div>
+        <div class="sprint-card"><div class="sprint-meta"><span class="sprint-tag">Sprint 10</span><span class="sprint-window">Weeks 7-8</span></div><h3>Human Escalation</h3><p class="sprint-summary">Design the handoff to an agent or support channel so confidence does not collapse when automation stops.</p><div class="viz-list"><div class="viz-item"><span class="viz-label">MVP Scope</span><p>Escalation trigger UI, context summary, handoff state, and traveler reassurance copy.</p></div><div class="viz-item"><span class="viz-label">Success Metrics</span><p>Users understand what has already been tried before a human joins the flow.</p></div><div class="viz-item"><span class="viz-label">User Stories</span><p>As a traveler, I want help to arrive with context so I do not have to repeat everything.</p></div><div class="viz-item"><span class="viz-label">Prioritized Screens</span><p>Escalation prompt, handoff summary, waiting state, live human takeover state.</p></div><div class="viz-item"><span class="viz-label">Leave for Phase 2</span><p>Rich agent co-browsing, voice handoff, and shared planning sessions.</p></div></div></div>
+        <div class="sprint-card"><div class="sprint-meta"><span class="sprint-tag">Sprint 11</span><span class="sprint-window">Weeks 9-10</span></div><h3>Ground and Arrival</h3><p class="sprint-summary">Extend disruption UX into the last mile so trip recovery is not just about the flight.</p><div class="viz-list"><div class="viz-item"><span class="viz-label">MVP Scope</span><p>Ground transport status, revised arrival summary, and simple hotel or meeting impact messaging.</p></div><div class="viz-item"><span class="viz-label">Success Metrics</span><p>Users feel the product handles the “whole trip” rather than only the air segment.</p></div><div class="viz-item"><span class="viz-label">User Stories</span><p>As a traveler, I want to know how a delay affects the rest of my itinerary and not just my flight.</p></div><div class="viz-item"><span class="viz-label">Prioritized Screens</span><p>Arrival summary, ride update state, hotel timing update, meeting impact card.</p></div><div class="viz-item"><span class="viz-label">Leave for Phase 2</span><p>True multimodal orchestration, rail recovery, and local mobility partner integrations.</p></div></div></div>
+        <div class="sprint-card"><div class="sprint-meta"><span class="sprint-tag">Sprint 12</span><span class="sprint-window">Weeks 11-12</span></div><h3>Recovery MVP Release</h3><p class="sprint-summary">Integrate the disruption work into a clean traveler narrative and validate end-to-end comprehension.</p><div class="viz-list"><div class="viz-item"><span class="viz-label">MVP Scope</span><p>Release-ready disruption journey, instrumentation, support copy, and confidence calibration.</p></div><div class="viz-item"><span class="viz-label">Success Metrics</span><p>Reduced decision time during disruption simulations and improved traveler confidence scores.</p></div><div class="viz-item"><span class="viz-label">User Stories</span><p>As a traveler, I want recovery moments to feel directed, not chaotic.</p></div><div class="viz-item"><span class="viz-label">Prioritized Screens</span><p>Full disrupted journey, release help states, high-risk scenario review, post-trip feedback.</p></div><div class="viz-item"><span class="viz-label">Leave for Phase 2</span><p>Autonomous execution loops and predictive disruption interventions before the traveler is affected.</p></div></div></div>
+      </div>
+    </div>
+
+    <div class="roadmap-quarter">
+      <div class="roadmap-kicker">
+        <div>
+          <span class="section-label">Quarter 03</span>
+          <div class="section-title">Cross-surface orchestration</div>
+        </div>
+        <div class="roadmap-chipline">
+          <span class="chip chip-red">Shared state</span>
+          <span class="chip chip-blue">Messaging UI</span>
+          <span class="chip chip-teal">Multi-surface continuity</span>
+        </div>
+      </div>
+      <p class="section-sub">Desired outcome: the traveler experience feels coherent across mobile, desktop, and messaging surfaces, with one trip memory and one source of truth.</p>
+      <div class="sprint-grid">
+        <div class="sprint-card"><div class="sprint-meta"><span class="sprint-tag">Sprint 13</span><span class="sprint-window">Weeks 1-2</span></div><h3>Trip Memory Model</h3><p class="sprint-summary">Translate fragmented UI states into a shared trip object that can power multiple surfaces consistently.</p><div class="viz-list"><div class="viz-item"><span class="viz-label">MVP Scope</span><p>Shared traveler context model, event hierarchy, and surfaced trip memory primitives for design.</p></div><div class="viz-item"><span class="viz-label">Success Metrics</span><p>Design reviews no longer require separate interpretations of trip state across surfaces.</p></div><div class="viz-item"><span class="viz-label">User Stories</span><p>As a traveler, I want the system to remember what it already knows regardless of where I interact.</p></div><div class="viz-item"><span class="viz-label">Prioritized Screens</span><p>State model diagrams, trip memory cards, continuity patterns, context handoff views.</p></div><div class="viz-item"><span class="viz-label">Leave for Phase 2</span><p>Deep admin editing tools for the state model and full trip graph visualization.</p></div></div></div>
+        <div class="sprint-card"><div class="sprint-meta"><span class="sprint-tag">Sprint 14</span><span class="sprint-window">Weeks 3-4</span></div><h3>Messaging Companion</h3><p class="sprint-summary">Explore how the same traveler AI patterns work in a lightweight messaging surface.</p><div class="viz-list"><div class="viz-item"><span class="viz-label">MVP Scope</span><p>Proposal summary in chat, approve/decline actions, and disruption updates in message format.</p></div><div class="viz-item"><span class="viz-label">Success Metrics</span><p>Users can complete a simple approval flow in messaging without needing the main app.</p></div><div class="viz-item"><span class="viz-label">User Stories</span><p>As a traveler, I want to handle lightweight decisions from the channel I am already using.</p></div><div class="viz-item"><span class="viz-label">Prioritized Screens</span><p>Chat summary, quick actions, open-in-app transition, message-based disruption approval.</p></div><div class="viz-item"><span class="viz-label">Leave for Phase 2</span><p>Full conversational travel management entirely inside messaging.</p></div></div></div>
+        <div class="sprint-card"><div class="sprint-meta"><span class="sprint-tag">Sprint 15</span><span class="sprint-window">Weeks 5-6</span></div><h3>Desktop Companion</h3><p class="sprint-summary">Design a larger-screen planning and review experience for travelers who want more context before committing.</p><div class="viz-list"><div class="viz-item"><span class="viz-label">MVP Scope</span><p>Expanded itinerary comparison, calendar context, richer policy explanation, and save-for-later review.</p></div><div class="viz-item"><span class="viz-label">Success Metrics</span><p>Users doing complex travel prefer the desktop surface for review while keeping mobile for action.</p></div><div class="viz-item"><span class="viz-label">User Stories</span><p>As a traveler, I want a richer review interface when my trip has more tradeoffs.</p></div><div class="viz-item"><span class="viz-label">Prioritized Screens</span><p>Desktop proposal view, comparison mode, review notes state, send-to-mobile continuation.</p></div><div class="viz-item"><span class="viz-label">Leave for Phase 2</span><p>Power-user trip assembly and collaboration with assistants or managers.</p></div></div></div>
+        <div class="sprint-card"><div class="sprint-meta"><span class="sprint-tag">Sprint 16</span><span class="sprint-window">Weeks 7-8</span></div><h3>Continuity Patterns</h3><p class="sprint-summary">Build the interaction patterns that make switching surfaces feel intentional instead of broken.</p><div class="viz-list"><div class="viz-item"><span class="viz-label">MVP Scope</span><p>Resume states, handoff tokens, “continue where you left off” modules, and confirmation continuity.</p></div><div class="viz-item"><span class="viz-label">Success Metrics</span><p>Users retain context when moving between message, mobile, and desktop without re-reading everything.</p></div><div class="viz-item"><span class="viz-label">User Stories</span><p>As a traveler, I want to move across surfaces without losing my place or confidence.</p></div><div class="viz-item"><span class="viz-label">Prioritized Screens</span><p>Resume banner, cross-surface success states, continuity prompt, reopened proposal state.</p></div><div class="viz-item"><span class="viz-label">Leave for Phase 2</span><p>Deep multi-device synchronization controls and offline continuity.</p></div></div></div>
+        <div class="sprint-card"><div class="sprint-meta"><span class="sprint-tag">Sprint 17</span><span class="sprint-window">Weeks 9-10</span></div><h3>Companion Voice Concepts</h3><p class="sprint-summary">Prototype voice as a companion modality without making it the primary shipping bet too early.</p><div class="viz-list"><div class="viz-item"><span class="viz-label">MVP Scope</span><p>Voice prompt entry concept, spoken confirmation pattern, and visual handoff back to screen UI.</p></div><div class="viz-item"><span class="viz-label">Success Metrics</span><p>Users understand which parts of the interaction are better handled by voice versus screen.</p></div><div class="viz-item"><span class="viz-label">User Stories</span><p>As a traveler, I want to start or approve simple actions hands-free when appropriate.</p></div><div class="viz-item"><span class="viz-label">Prioritized Screens</span><p>Voice entry concept, listening state, spoken confirmation state, screen follow-up state.</p></div><div class="viz-item"><span class="viz-label">Leave for Phase 2</span><p>Full voice-first trip management and no-screen disruption handling.</p></div></div></div>
+        <div class="sprint-card"><div class="sprint-meta"><span class="sprint-tag">Sprint 18</span><span class="sprint-window">Weeks 11-12</span></div><h3>Orchestration Design System</h3><p class="sprint-summary">Formalize reusable components and states so the traveler AI experience can scale coherently.</p><div class="viz-list"><div class="viz-item"><span class="viz-label">MVP Scope</span><p>Recommendation cards, reasoning modules, continuity states, status banners, and approval actions.</p></div><div class="viz-item"><span class="viz-label">Success Metrics</span><p>New surfaces can be designed faster using shared components instead of bespoke one-off UI.</p></div><div class="viz-item"><span class="viz-label">User Stories</span><p>As a product team, we want the experience to stay coherent as we expand traveler AI into more surfaces.</p></div><div class="viz-item"><span class="viz-label">Prioritized Screens</span><p>Component library, state documentation, orchestration patterns, system-level design review.</p></div><div class="viz-item"><span class="viz-label">Leave for Phase 2</span><p>Full tokenized AI design system governance across all personas.</p></div></div></div>
+      </div>
+    </div>
+
+    <div class="roadmap-quarter">
+      <div class="roadmap-kicker">
+        <div>
+          <span class="section-label">Quarter 04</span>
+          <div class="section-title">Future-facing invention work</div>
+        </div>
+        <div class="roadmap-chipline">
+          <span class="chip chip-red">Predictive UX</span>
+          <span class="chip chip-blue">Autonomy controls</span>
+          <span class="chip chip-amber">Invented patterns</span>
+        </div>
+      </div>
+      <p class="section-sub">Desired outcome: explore the next-generation traveler AI patterns we cannot fully ship yet, but should prototype now so the product has a design point of view beyond basic automation.</p>
+      <div class="sprint-grid">
+        <div class="sprint-card"><div class="sprint-meta"><span class="sprint-tag">Sprint 19</span><span class="sprint-window">Weeks 1-2</span></div><h3>Proactive Drafting</h3><p class="sprint-summary">Prototype interfaces where the system proposes a trip before the traveler explicitly starts a booking flow.</p><div class="viz-list"><div class="viz-item"><span class="viz-label">MVP Scope</span><p>Meeting-triggered proposal concepts, proactive summary cards, and “why now” explanation patterns.</p></div><div class="viz-item"><span class="viz-label">Success Metrics</span><p>Users find proactive suggestions helpful rather than intrusive in research testing.</p></div><div class="viz-item"><span class="viz-label">User Stories</span><p>As a traveler, I want a head start when my calendar clearly implies a trip.</p></div><div class="viz-item"><span class="viz-label">Prioritized Screens</span><p>Proactive prompt, generated trip draft, dismissal state, snooze and trust controls.</p></div><div class="viz-item"><span class="viz-label">Leave for Phase 2</span><p>Production-grade signal confidence and enterprise calendar automation logic.</p></div></div></div>
+        <div class="sprint-card"><div class="sprint-meta"><span class="sprint-tag">Sprint 20</span><span class="sprint-window">Weeks 3-4</span></div><h3>Autonomy Dashboard</h3><p class="sprint-summary">Invent a clearer model for how travelers inspect and tune what the AI is allowed to do on their behalf.</p><div class="viz-list"><div class="viz-item"><span class="viz-label">MVP Scope</span><p>Autonomy levels, action logs, approval thresholds, and reversible system decisions.</p></div><div class="viz-item"><span class="viz-label">Success Metrics</span><p>Users can predict system behavior more accurately after using the autonomy dashboard concept.</p></div><div class="viz-item"><span class="viz-label">User Stories</span><p>As a traveler, I want to know what the system may do automatically before it acts for me.</p></div><div class="viz-item"><span class="viz-label">Prioritized Screens</span><p>Autonomy home, permission model, recent actions log, rollback state.</p></div><div class="viz-item"><span class="viz-label">Leave for Phase 2</span><p>Cross-persona permissioning and policy-driven autonomy inheritance.</p></div></div></div>
+        <div class="sprint-card"><div class="sprint-meta"><span class="sprint-tag">Sprint 21</span><span class="sprint-window">Weeks 5-6</span></div><h3>Companion Presence</h3><p class="sprint-summary">Explore how the AI can feel present and helpful without demanding constant attention.</p><div class="viz-list"><div class="viz-item"><span class="viz-label">MVP Scope</span><p>Ambient status concepts, calm presence indicators, and subtle “watching for issues” patterns.</p></div><div class="viz-item"><span class="viz-label">Success Metrics</span><p>Users report higher confidence without a corresponding rise in perceived interruption.</p></div><div class="viz-item"><span class="viz-label">User Stories</span><p>As a traveler, I want reassurance that the system is monitoring my trip without overwhelming me.</p></div><div class="viz-item"><span class="viz-label">Prioritized Screens</span><p>Ambient status widget, passive monitoring state, escalation thresholds, reassurance moments.</p></div><div class="viz-item"><span class="viz-label">Leave for Phase 2</span><p>Hardware integrations and truly continuous live monitoring experiences.</p></div></div></div>
+        <div class="sprint-card"><div class="sprint-meta"><span class="sprint-tag">Sprint 22</span><span class="sprint-window">Weeks 7-8</span></div><h3>Multi-Traveler Scenarios</h3><p class="sprint-summary">Push the concepts into assistant, family, and team-travel use cases to reveal where the current model breaks.</p><div class="viz-list"><div class="viz-item"><span class="viz-label">MVP Scope</span><p>Shared trip views, delegated approvals, and companion traveler context patterns.</p></div><div class="viz-item"><span class="viz-label">Success Metrics</span><p>Research identifies where solo-traveler patterns fail before scaling to more complex cases.</p></div><div class="viz-item"><span class="viz-label">User Stories</span><p>As a traveler or assistant, I want to understand shared responsibilities and approvals on a trip.</p></div><div class="viz-item"><span class="viz-label">Prioritized Screens</span><p>Shared itinerary, delegated approval state, companion traveler card, role visibility patterns.</p></div><div class="viz-item"><span class="viz-label">Leave for Phase 2</span><p>Production collaboration architecture and real-time shared editing.</p></div></div></div>
+        <div class="sprint-card"><div class="sprint-meta"><span class="sprint-tag">Sprint 23</span><span class="sprint-window">Weeks 9-10</span></div><h3>Anticipatory Recovery</h3><p class="sprint-summary">Prototype the interfaces for acting before disruption fully lands, not just after the traveler is already affected.</p><div class="viz-list"><div class="viz-item"><span class="viz-label">MVP Scope</span><p>Risk forecast cards, preemptive recovery proposals, and confidence-based recommendation timing.</p></div><div class="viz-item"><span class="viz-label">Success Metrics</span><p>Users prefer preemptive options when confidence is high and reasoning is clear.</p></div><div class="viz-item"><span class="viz-label">User Stories</span><p>As a traveler, I want earlier options when my trip is likely to go wrong, not just after it does.</p></div><div class="viz-item"><span class="viz-label">Prioritized Screens</span><p>Risk prediction state, early recommendation UI, confidence explanation, defer decision state.</p></div><div class="viz-item"><span class="viz-label">Leave for Phase 2</span><p>Live predictive systems, operational confidence thresholds, and automatic preemptive execution.</p></div></div></div>
+        <div class="sprint-card"><div class="sprint-meta"><span class="sprint-tag">Sprint 24</span><span class="sprint-window">Weeks 11-12</span></div><h3>North Star Prototype</h3><p class="sprint-summary">Wrap the year into a high-fidelity north-star concept showing where traveler AI can go beyond the MVPs.</p><div class="viz-list"><div class="viz-item"><span class="viz-label">MVP Scope</span><p>Connected north-star prototype across proposal, disruption, messaging, and autonomy control surfaces.</p></div><div class="viz-item"><span class="viz-label">Success Metrics</span><p>Leadership and product teams align on a believable long-term design direction with clear next bets.</p></div><div class="viz-item"><span class="viz-label">User Stories</span><p>As a product organization, we want a concrete future vision that informs what we build next.</p></div><div class="viz-item"><span class="viz-label">Prioritized Screens</span><p>North-star flow, future-state dashboard, autonomy control model, proactive trip orchestration journey.</p></div><div class="viz-item"><span class="viz-label">Leave for Phase 2</span><p>Anything that depends on mature orchestration, deep integrations, or production-grade autonomous action.</p></div></div></div>
+      </div>
+    </div>
   </div>
 
   <!-- ══ GALLERY ══ -->
