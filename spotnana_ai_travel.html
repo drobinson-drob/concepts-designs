@@ -39,22 +39,24 @@
   .panel { display: none; padding: 72px 48px 120px; max-width: 1080px; margin: 0 auto; }
 
   /* Show panel when its radio is checked */
-  #tab-home:checked     ~ .site #panel-home,
-  #tab-traveler:checked ~ .site #panel-traveler,
-  #tab-agent:checked    ~ .site #panel-agent,
-  #tab-tmc:checked      ~ .site #panel-tmc,
-  #tab-admin:checked    ~ .site #panel-admin,
-  #tab-roadmap:checked  ~ .site #panel-roadmap,
-  #tab-gallery:checked  ~ .site #panel-gallery { display: block; }
+  #tab-home:checked       ~ .site #panel-home,
+  #tab-principles:checked ~ .site #panel-principles,
+  #tab-traveler:checked   ~ .site #panel-traveler,
+  #tab-agent:checked      ~ .site #panel-agent,
+  #tab-tmc:checked        ~ .site #panel-tmc,
+  #tab-admin:checked      ~ .site #panel-admin,
+  #tab-roadmap:checked    ~ .site #panel-roadmap,
+  #tab-gallery:checked    ~ .site #panel-gallery { display: block; }
 
   /* Nav tab active state */
-  #tab-home:checked     ~ .site .nav label[for="tab-home"],
-  #tab-traveler:checked ~ .site .nav label[for="tab-traveler"],
-  #tab-agent:checked    ~ .site .nav label[for="tab-agent"],
-  #tab-tmc:checked      ~ .site .nav label[for="tab-tmc"],
-  #tab-admin:checked    ~ .site .nav label[for="tab-admin"],
-  #tab-roadmap:checked  ~ .site .nav label[for="tab-roadmap"],
-  #tab-gallery:checked  ~ .site .nav label[for="tab-gallery"] {
+  #tab-home:checked       ~ .site .nav label[for="tab-home"],
+  #tab-principles:checked ~ .site .nav label[for="tab-principles"],
+  #tab-traveler:checked   ~ .site .nav label[for="tab-traveler"],
+  #tab-agent:checked      ~ .site .nav label[for="tab-agent"],
+  #tab-tmc:checked        ~ .site .nav label[for="tab-tmc"],
+  #tab-admin:checked      ~ .site .nav label[for="tab-admin"],
+  #tab-roadmap:checked    ~ .site .nav label[for="tab-roadmap"],
+  #tab-gallery:checked    ~ .site .nav label[for="tab-gallery"] {
     color: var(--ink);
     font-weight: 500;
     border-bottom-color: var(--red);
@@ -647,6 +649,7 @@
 
 <!-- Radio inputs must come BEFORE .site for CSS sibling selectors to work -->
 <input class="tab-radio" type="radio" name="tabs" id="tab-home"     checked>
+<input class="tab-radio" type="radio" name="tabs" id="tab-principles">
 <input class="tab-radio" type="radio" name="tabs" id="tab-traveler">
 <input class="tab-radio" type="radio" name="tabs" id="tab-agent">
 <input class="tab-radio" type="radio" name="tabs" id="tab-tmc">
@@ -663,6 +666,7 @@
       </a>
       <div class="nav-tabs">
         <label for="tab-home">Home</label>
+        <label for="tab-principles">Principles</label>
         <label for="tab-traveler">Traveler</label>
         <label for="tab-agent">Agent</label>
         <label for="tab-tmc">TMC</label>
@@ -719,6 +723,73 @@
       <h2>Autonomy vs. agency</h2>
       <p>The central design question is not how to automate more. It is when to act, when to ask, and how to explain the tradeoff. Good design gives users adjustable autonomy, visible reasoning, and a safe path to intervene without starting over.</p>
       <div class="chips" style="margin-top:18px"><span class="chip chip-red">Configurable autonomy</span><span class="chip chip-red">Trust as a design material</span><span class="chip chip-teal">Context-sensitive defaults</span><span class="chip chip-blue">Reversibility at every step</span></div>
+    </div>
+  </div>
+
+  <!-- ══ PRINCIPLES ══ -->
+  <div class="panel" id="panel-principles">
+    <div class="header">
+      <span class="eyebrow">Design Principles</span>
+      <h1>How we design at Spotnana</h1>
+      <p class="lead">These principles guide every interface decision we make — from the smallest interaction to full product strategy. They are how we hold ourselves accountable to the people who use what we build.</p>
+    </div>
+
+    <div class="sprint-grid" style="grid-template-columns: repeat(2, 1fr);">
+      <div class="card">
+        <span class="card-label">01</span>
+        <h2>Clarity over cleverness</h2>
+        <p>Travel is stressful. Our interfaces should reduce cognitive load, not add to it. Every element must earn its place. If a user has to think about the UI, we've failed.</p>
+        <div class="chips" style="margin-top:18px"><span class="chip chip-teal">Plain language</span><span class="chip chip-teal">Visible labels</span><span class="chip chip-teal">Predictable patterns</span></div>
+      </div>
+
+      <div class="card">
+        <span class="card-label">02</span>
+        <h2>AI assists, humans decide</h2>
+        <p>Intelligence should surface the right option at the right time — but never take away the user's agency. AI recommendations are suggestions, not mandates.</p>
+        <div class="chips" style="margin-top:18px"><span class="chip chip-red">Show reasoning</span><span class="chip chip-red">Easy override</span><span class="chip chip-teal">Never auto-book</span></div>
+      </div>
+
+      <div class="card">
+        <span class="card-label">03</span>
+        <h2>Design for the 80%, accommodate the 20%</h2>
+        <p>Most travelers need a fast, simple path. Power users and admins need depth. Layer complexity progressively — the default experience should be effortless, with advanced controls always accessible.</p>
+        <div class="chips" style="margin-top:18px"><span class="chip chip-blue">Smart defaults</span><span class="chip chip-blue">Progressive disclosure</span></div>
+      </div>
+
+      <div class="card">
+        <span class="card-label">04</span>
+        <h2>One experience, many contexts</h2>
+        <p>A traveler, an agent, a TMC admin, and a company policy manager all use Spotnana — often for the same trip. Our design must feel consistent across every persona while adapting to each one's needs.</p>
+        <div class="chips" style="margin-top:18px"><span class="chip chip-blue">Shared components</span><span class="chip chip-blue">Persona-specific density</span></div>
+      </div>
+
+      <div class="card">
+        <span class="card-label">05</span>
+        <h2>Speed is a feature</h2>
+        <p>Every second matters when someone is rebooking a cancelled flight at the airport. Our interfaces must be fast to load, fast to understand, and fast to act on.</p>
+        <div class="chips" style="margin-top:18px"><span class="chip chip-teal">Time-to-action</span><span class="chip chip-teal">Prefetch next steps</span><span class="chip chip-teal">Minimize clicks</span></div>
+      </div>
+
+      <div class="card">
+        <span class="card-label">06</span>
+        <h2>Trust through transparency</h2>
+        <p>Corporate travel involves money, policy, and compliance. Users must understand why something is allowed, restricted, or recommended. Never leave them guessing.</p>
+        <div class="chips" style="margin-top:18px"><span class="chip chip-red">Inline policy status</span><span class="chip chip-red">Fare breakdowns</span><span class="chip chip-teal">Early approval signals</span></div>
+      </div>
+
+      <div class="card">
+        <span class="card-label">07</span>
+        <h2>Meet people where they are</h2>
+        <p>Not every interaction requires opening the app. The best travel experience might be a Slack message, an email confirmation, or a voice command. Design for the medium, not just the screen.</p>
+        <div class="chips" style="margin-top:18px"><span class="chip chip-blue">Multi-channel</span><span class="chip chip-blue">Adapt to surface</span></div>
+      </div>
+
+      <div class="card">
+        <span class="card-label">08</span>
+        <h2>Ship, learn, refine</h2>
+        <p>Good design is iterative. We prototype rapidly, test with real users, and improve based on evidence — not assumptions. Shipping fast is not the enemy of shipping well.</p>
+        <div class="chips" style="margin-top:18px"><span class="chip chip-teal">Prototype early</span><span class="chip chip-teal">Real data</span><span class="chip chip-red">Measure outcomes</span></div>
+      </div>
     </div>
   </div>
 
