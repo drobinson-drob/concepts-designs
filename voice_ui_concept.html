@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Voice</title>
+<link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@200;300;400&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+
+  :root {
+    --black: #000000;
+    --white: #FFFFFF;
+    --grey-1: rgba(255,255,255,0.06);
+    --grey-2: rgba(255,255,255,0.12);
+    --grey-3: rgba(255,255,255,0.40);
+    --grey-4: rgba(255,255,255,0.65);
+    --accent: #0A84FF;
+    --accent-glow: rgba(10,132,255,0.18);
+  }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    background: var(--black);
+    color: var(--white);
+    font-family: -apple-system, 'SF Pro Display', 'Helvetica Neue', sans-serif;
+    overflow: hidden;
+    user-select: none;
+  }
+
+  /* ── PHONE SHELL ── */
+  .shell {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 390px;
+    height: 844px;
+    background: #000;
+    border-radius: 54px;
+    border: 1px solid rgba(255,255,255,0.14);
+    overflow: hidden;
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,0.06),
+      0 40px 80px rgba(0,0,0,0.8),
+      0 80px 160px rgba(0,0,0,0.5);
+  }
+
+  /* ── DYNAMIC ISLAND ── */
+  .island {
+    position: absolute;
+    top: 14px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120px;
+    height: 36px;
+    background: #000;
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.08);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .island.listening {
+    width: 200px;
+    height: 44px;
+    border-radius: 24px;
+    border-color: rgba(10,132,255,0.3);
+    box-shadow: 0 0 0 1px rgba(10,132,255,0.15), 0 0 24px rgba(10,132,255,0.12);
+  }
+
+  .island-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.08);
+    transition: all 0.4s ease;
+  }
+
+  .island.listening .island-dot {
+    width: 8px;
+    height: 8px;
+    background: var(--accent);
+    box-shadow: 0 0 8px rgba(10,132,255,0.8);
+    animation: pulse-dot 1.4s ease-in-out infinite;
+  }
+
+  .island-wave {
+    display: none;
+    align-items: center;
+    gap: 2px;
+    height: 20px;
+  }
+
+  .island.listening .island-wave { display: flex; }
+  .island.listening .island-dot { display: none; }
+
+  .island-wave span {
+    width: 2px;
+    background: var(--accent);
+    border-radius: 1px;
+    animation: island-bar 0.8s ease-in-out infinite;
+  }
+
+  .island-wave span:nth-child(1) { height: 6px;  animation-delay: 0s; }
+  .island-wave span:nth-child(2) { height: 12px; animation-delay: 0.1s; }
+  .island-wave span:nth-child(3) { height: 18px; animation-delay: 0.2s; }
+  .island-wave span:nth-child(4) { height: 12px; animation-delay: 0.3s; }
+  .island-wave span:nth-child(5) { height: 8px;  animation-delay: 0.4s; }
+  .island-wave span:nth-child(6) { height: 14px; animation-delay: 0.15s; }
+  .island-wave span:nth-child(7) { height: 10px; animation-delay: 0.25s; }
+
+  @keyframes island-bar {
+    0%, 100% { transform: scaleY(0.5); opacity: 0.6; }
+    50% { transform: scaleY(1); opacity: 1; }
+  }
+
+  /* ── STATUS BAR ── */
+  .status {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 18px 28px 0;
+    z-index: 50;
+  }
+
+  .status-time {
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+    color: var(--white);
+  }
+
+  .status-icons {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--white);
+  }
+
+  /* ── MAIN SCREEN ── */
+  .screen {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: opacity 0.6s ease;
+  }
+
+  /* ── STATE: IDLE ── */
+  #state-idle {
+    justify-content: center;
+    padding: 80px 40px;
+  }
+
+  .idle-greeting {
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--grey-3);
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .idle-prompt {
+    font-size: 34px;
+    font-weight: 200;
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+    color: var(--white);
+    text-align: center;
+    margin-bottom: 60px;
+  }
+
+  .idle-orb {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 38% 35%, rgba(255,255,255,0.12), rgba(255,255,255,0.02) 60%, transparent);
+    border: 1px solid rgba(255,255,255,0.10);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    margin-bottom: 20px;
+    position: relative;
+  }
+
+  .idle-orb::before {
+    content: '';
+    position: absolute;
+    inset: -8px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.04);
+    animation: orb-ring 3s ease-in-out infinite;
+  }
+
+  .idle-orb::after {
+    content: '';
+    position: absolute;
+    inset: -16px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.02);
+    animation: orb-ring 3s ease-in-out infinite 0.5s;
+  }
+
+  @keyframes orb-ring {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.04); opacity: 0.5; }
+  }
+
+  .idle-orb:hover {
+    border-color: rgba(255,255,255,0.20);
+    background: radial-gradient(circle at 38% 35%, rgba(255,255,255,0.18), rgba(255,255,255,0.04) 60%, transparent);
+    transform: scale(1.04);
+  }
+
+  .idle-orb svg {
+    width: 28px;
+    height: 28px;
+    opacity: 0.7;
+  }
+
+  .idle-hint {
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--grey-3);
+    letter-spacing: 0.02em;
+  }
+
+  /* ── STATE: LISTENING ── */
+  #state-listening {
+    display: none;
+    justify-content: flex-end;
+    padding-bottom: 80px;
+  }
+
+  .listen-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+
+  /* Big waveform */
+  .waveform-wrap {
+    width: 100%;
+    height: 200px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 48px;
+  }
+
+  canvas#waveCanvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .listen-label {
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 24px;
+  }
+
+  .listen-transcript {
+    font-size: 28px;
+    font-weight: 200;
+    letter-spacing: -0.3px;
+    line-height: 1.3;
+    color: var(--white);
+    text-align: center;
+    padding: 0 40px;
+    min-height: 80px;
+    margin-bottom: 48px;
+  }
+
+  .listen-transcript .typed-cursor {
+    display: inline-block;
+    width: 2px;
+    height: 28px;
+    background: var(--accent);
+    margin-left: 3px;
+    vertical-align: middle;
+    animation: blink 1s step-end infinite;
+  }
+
+  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+  .listen-cancel {
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--grey-3);
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    padding: 12px 24px;
+    border: 1px solid var(--grey-2);
+    border-radius: 999px;
+    transition: all 0.2s;
+  }
+
+  .listen-cancel:hover {
+    color: var(--white);
+    border-color: var(--grey-3);
+  }
+
+  /* ── STATE: RESPONDING ── */
+  #state-responding {
+    display: none;
+    padding: 100px 40px 48px;
+    justify-content: space-between;
+  }
+
+  .response-context {
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--grey-3);
+    letter-spacing: 0.02em;
+    text-align: center;
+    margin-bottom: 8px;
+  }
+
+  .response-query {
+    font-size: 16px;
+    font-weight: 300;
+    color: var(--grey-4);
+    text-align: center;
+    margin-bottom: 40px;
+    letter-spacing: -0.2px;
+  }
+
+  .response-divider {
+    width: 40px;
+    height: 1px;
+    background: var(--grey-2);
+    margin: 0 auto 40px;
+  }
+
+  .response-text {
+    font-size: 26px;
+    font-weight: 200;
+    letter-spacing: -0.3px;
+    line-height: 1.45;
+    color: var(--white);
+    text-align: center;
+  }
+
+  .response-text .highlight {
+    color: var(--white);
+    font-weight: 300;
+  }
+
+  /* Cards under response */
+  .response-cards {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 40px;
+  }
+
+  .r-card {
+    background: var(--grey-1);
+    border: 1px solid var(--grey-2);
+    border-radius: 18px;
+    padding: 18px 22px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: all 0.25s ease;
+  }
+
+  .r-card:hover {
+    background: var(--grey-2);
+    border-color: rgba(255,255,255,0.16);
+  }
+
+  .r-card-left {}
+
+  .r-card-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--grey-3);
+    margin-bottom: 4px;
+  }
+
+  .r-card-value {
+    font-size: 17px;
+    font-weight: 300;
+    color: var(--white);
+    letter-spacing: -0.2px;
+  }
+
+  .r-card-sub {
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--grey-3);
+    margin-top: 2px;
+  }
+
+  .r-card-badge {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 4px 10px;
+    border-radius: 999px;
+    letter-spacing: 0.04em;
+  }
+
+  .badge-green { background: rgba(48,209,88,0.14); color: #30D158; }
+  .badge-grey  { background: var(--grey-1); color: var(--grey-3); border: 1px solid var(--grey-2); }
+
+  .respond-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 24px;
+  }
+
+  .btn-confirm {
+    flex: 1;
+    height: 52px;
+    background: var(--accent);
+    border: none;
+    border-radius: 999px;
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--white);
+    cursor: pointer;
+    letter-spacing: -0.1px;
+    transition: all 0.2s;
+  }
+
+  .btn-confirm:hover { background: #0A7AE0; transform: translateY(-1px); }
+  .btn-confirm:active { transform: scale(0.98); }
+
+  .btn-ghost-action {
+    flex: 1;
+    height: 52px;
+    background: transparent;
+    border: 1px solid var(--grey-2);
+    border-radius: 999px;
+    font-size: 15px;
+    font-weight: 300;
+    color: var(--grey-4);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-ghost-action:hover { border-color: var(--grey-3); color: var(--white); }
+
+  /* Bottom mic bar */
+  .mic-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 12px;
+  }
+
+  .mic-btn {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 24px rgba(255,255,255,0.12);
+  }
+
+  .mic-btn:hover { transform: scale(1.06); box-shadow: 0 6px 32px rgba(255,255,255,0.18); }
+  .mic-btn:active { transform: scale(0.96); }
+
+  .mic-btn.active {
+    background: var(--accent);
+    box-shadow: 0 0 0 8px rgba(10,132,255,0.12), 0 4px 24px rgba(10,132,255,0.4);
+    animation: mic-pulse 1.8s ease-in-out infinite;
+  }
+
+  @keyframes mic-pulse {
+    0%, 100% { box-shadow: 0 0 0 8px rgba(10,132,255,0.12), 0 4px 24px rgba(10,132,255,0.4); }
+    50% { box-shadow: 0 0 0 16px rgba(10,132,255,0.06), 0 4px 32px rgba(10,132,255,0.5); }
+  }
+
+  .mic-btn svg {
+    width: 22px;
+    height: 22px;
+    transition: all 0.3s;
+  }
+
+  .mic-btn.active svg path { fill: var(--white); }
+
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(0.85); }
+  }
+
+  /* ── HOME INDICATOR ── */
+  .home-indicator {
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 134px;
+    height: 5px;
+    background: rgba(255,255,255,0.28);
+    border-radius: 3px;
+  }
+
+  /* ── TAP TO SWITCH HINT (demo) ── */
+  .demo-hint {
+    position: absolute;
+    bottom: -44px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 11px;
+    color: rgba(255,255,255,0.25);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* ── TRANSITIONS ── */
+  .screen { opacity: 1; }
+  .screen.hidden { opacity: 0; pointer-events: none; }
+
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- Dynamic Island -->
+  <div class="island" id="island">
+    <div class="island-dot"></div>
+    <div class="island-wave">
+      <span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+
+  <!-- Status Bar -->
+  <div class="status">
+    <span class="status-time">9:41</span>
+    <div class="status-icons">
+      <svg width="17" height="12" viewBox="0 0 17 12" fill="white"><rect x="0" y="3" width="3" height="9" rx="1" opacity="0.4"/><rect x="4.5" y="2" width="3" height="10" rx="1" opacity="0.6"/><rect x="9" y="0.5" width="3" height="11.5" rx="1"/><rect x="13.5" y="0" width="3" height="9" rx="1" opacity="0.3"/></svg>
+      <svg width="16" height="12" viewBox="0 0 16 12" fill="none"><path d="M8 2.5C10.2 2.5 12.1 3.5 13.4 5L15 3.3C13.2 1.3 10.7 0 8 0C5.3 0 2.8 1.3 1 3.3L2.6 5C3.9 3.5 5.8 2.5 8 2.5Z" fill="white"/><path d="M8 5.5C9.5 5.5 10.8 6.2 11.7 7.2L13.3 5.5C11.9 4 10.1 3 8 3C5.9 3 4.1 4 2.7 5.5L4.3 7.2C5.2 6.2 6.5 5.5 8 5.5Z" fill="white" opacity="0.7"/><circle cx="8" cy="10" r="2" fill="white"/></svg>
+      <svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="21" height="11" rx="3.5" stroke="white" stroke-opacity="0.35"/><rect x="2" y="2" width="16" height="8" rx="2" fill="white"/><path d="M23 4.5V7.5C23.8 7.2 24.5 6.7 24.5 6C24.5 5.3 23.8 4.8 23 4.5Z" fill="white" opacity="0.4"/></svg>
+    </div>
+  </div>
+
+  <!-- STATE: IDLE -->
+  <div class="screen" id="state-idle">
+    <div class="idle-greeting">Good morning, David</div>
+    <div class="idle-prompt">What do you<br>need today?</div>
+    <div class="idle-orb" id="idleOrb">
+      <svg viewBox="0 0 28 28" fill="none">
+        <path d="M14 4C14 4 14 4 14 4C11.2 4 9 6.2 9 9V15C9 17.8 11.2 20 14 20C16.8 20 19 17.8 19 15V9C19 6.2 16.8 4 14 4Z" fill="white" opacity="0.9"/>
+        <path d="M6 14C6 14 6 18 10 21C12 22.4 14 22.5 14 22.5C14 22.5 16 22.4 18 21C22 18 22 14 22 14" stroke="white" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
+        <line x1="14" y1="22.5" x2="14" y2="26" stroke="white" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
+        <line x1="10" y1="26" x2="18" y2="26" stroke="white" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+      </svg>
+    </div>
+    <div class="idle-hint">Tap to speak</div>
+  </div>
+
+  <!-- STATE: LISTENING -->
+  <div class="screen hidden" id="state-listening">
+    <div class="listen-container">
+      <div class="waveform-wrap">
+        <canvas id="waveCanvas"></canvas>
+      </div>
+      <div class="listen-label">Listening</div>
+      <div class="listen-transcript" id="transcript">
+        <span id="transcriptText"></span><span class="typed-cursor"></span>
+      </div>
+      <div class="listen-cancel" id="cancelBtn">Cancel</div>
+    </div>
+  </div>
+
+  <!-- STATE: RESPONDING -->
+  <div class="screen hidden" id="state-responding">
+    <div style="width:100%">
+      <div class="response-context">Flight request</div>
+      <div class="response-query">"Book me on the next flight to Chicago"</div>
+      <div class="response-divider"></div>
+      <div class="response-text">
+        I found two options<br>for Thursday morning.
+      </div>
+      <div class="response-cards">
+        <div class="r-card">
+          <div class="r-card-left">
+            <div class="r-card-label">United Airlines</div>
+            <div class="r-card-value">UA 492 &nbsp;&#183;&nbsp; 6:05am</div>
+            <div class="r-card-sub">Economy Plus &nbsp;&#183;&nbsp; Aisle 12C &nbsp;&#183;&nbsp; $287</div>
+          </div>
+          <span class="r-card-badge badge-green">Policy</span>
+        </div>
+        <div class="r-card">
+          <div class="r-card-left">
+            <div class="r-card-label">American Airlines</div>
+            <div class="r-card-value">AA 318 &nbsp;&#183;&nbsp; 7:20am</div>
+            <div class="r-card-sub">Main Cabin &nbsp;&#183;&nbsp; Middle &nbsp;&#183;&nbsp; $241</div>
+          </div>
+          <span class="r-card-badge badge-grey">Policy</span>
+        </div>
+      </div>
+      <div class="respond-actions">
+        <button class="btn-confirm" id="confirmBtn">Book UA 492</button>
+        <button class="btn-ghost-action" id="editBtn">Change</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mic Button -->
+  <div class="mic-bar">
+    <div class="mic-btn" id="micBtn">
+      <svg viewBox="0 0 22 28" fill="none">
+        <path d="M11 2C11 2 11 2 11 2C8.8 2 7 3.8 7 6V14C7 16.2 8.8 18 11 18C13.2 18 15 16.2 15 14V6C15 3.8 13.2 2 11 2Z" fill="#000"/>
+        <path d="M3 12C3 12 3 17 8 20C9.6 21.1 11 21.2 11 21.2C11 21.2 12.4 21.1 14 20C19 17 19 12 19 12" stroke="#000" stroke-width="1.8" stroke-linecap="round"/>
+        <line x1="11" y1="21.2" x2="11" y2="25" stroke="#000" stroke-width="1.8" stroke-linecap="round"/>
+        <line x1="7.5" y1="25" x2="14.5" y2="25" stroke="#000" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>
+    </div>
+  </div>
+
+  <div class="home-indicator"></div>
+  <div class="demo-hint">Tap mic to cycle states</div>
+
+</div>
+
+<script>
+(function() {
+  const states = ['idle', 'listening', 'responding'];
+  let current = 0;
+  let waveAnimId = null;
+  let typeInterval = null;
+
+  const island = document.getElementById('island');
+  const micBtn = document.getElementById('micBtn');
+  const idleOrb = document.getElementById('idleOrb');
+  const cancelBtn = document.getElementById('cancelBtn');
+  const confirmBtn = document.getElementById('confirmBtn');
+  const editBtn = document.getElementById('editBtn');
+
+  const panels = {
+    idle:       document.getElementById('state-idle'),
+    listening:  document.getElementById('state-listening'),
+    responding: document.getElementById('state-responding'),
+  };
+
+  function goTo(name) {
+    // Hide all
+    Object.values(panels).forEach(p => p.classList.add('hidden'));
+    // Show target
+    panels[name].classList.remove('hidden');
+    current = states.indexOf(name);
+
+    // Island
+    if (name === 'listening') {
+      island.classList.add('listening');
+      micBtn.classList.add('active');
+      startWave();
+      typeTranscript();
+    } else {
+      island.classList.remove('listening');
+      micBtn.classList.remove('active');
+      stopWave();
+    }
+
+    if (name === 'responding') {
+      micBtn.querySelector('svg').style.opacity = '0.4';
+    } else {
+      micBtn.querySelector('svg').style.opacity = '1';
+    }
+  }
+
+  // Cycle on mic tap
+  micBtn.addEventListener('click', function() {
+    const next = states[(current + 1) % states.length];
+    goTo(next);
+  });
+
+  idleOrb.addEventListener('click', function() { goTo('listening'); });
+  cancelBtn.addEventListener('click', function() { goTo('idle'); });
+  confirmBtn.addEventListener('click', function() { goTo('idle'); });
+  editBtn.addEventListener('click', function() { goTo('listening'); });
+
+  // ── WAVEFORM ──
+  const canvas = document.getElementById('waveCanvas');
+  const ctx = canvas.getContext('2d');
+  let phase = 0;
+
+  function resizeCanvas() {
+    canvas.width = canvas.offsetWidth * window.devicePixelRatio;
+    canvas.height = canvas.offsetHeight * window.devicePixelRatio;
+    ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+  }
+
+  function drawWave() {
+    const W = canvas.offsetWidth;
+    const H = canvas.offsetHeight;
+    ctx.clearRect(0, 0, W, H);
+
+    const cx = W / 2;
+    const cy = H / 2;
+    const t = Date.now() / 1000;
+
+    // Draw 3 layered sine waves
+    const waves = [
+      { amp: 38, freq: 2.2, speed: 1.1, alpha: 0.9,  color: '#0A84FF' },
+      { amp: 24, freq: 3.1, speed: 0.8, alpha: 0.45, color: '#40A0FF' },
+      { amp: 14, freq: 4.5, speed: 1.6, alpha: 0.25, color: '#80C8FF' },
+    ];
+
+    waves.forEach(wave => {
+      ctx.beginPath();
+      ctx.strokeStyle = wave.color;
+      ctx.globalAlpha = wave.alpha;
+      ctx.lineWidth = 1.5;
+      ctx.lineCap = 'round';
+
+      for (let x = 0; x <= W; x += 1) {
+        const norm = (x / W) * Math.PI * wave.freq * 2;
+        // Envelope: amplitude tapers at edges
+        const envelope = Math.sin((x / W) * Math.PI);
+        const y = cy + Math.sin(norm + t * wave.speed) * wave.amp * envelope;
+        x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+    });
+
+    // Center glow
+    ctx.globalAlpha = 1;
+    const grd = ctx.createRadialGradient(cx, cy, 0, cx, cy, 60);
+    grd.addColorStop(0, 'rgba(10,132,255,0.12)');
+    grd.addColorStop(1, 'transparent');
+    ctx.fillStyle = grd;
+    ctx.fillRect(0, 0, W, H);
+  }
+
+  function startWave() {
+    resizeCanvas();
+    function loop() {
+      drawWave();
+      waveAnimId = requestAnimationFrame(loop);
+    }
+    loop();
+  }
+
+  function stopWave() {
+    if (waveAnimId) {
+      cancelAnimationFrame(waveAnimId);
+      waveAnimId = null;
+    }
+    ctx.clearRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
+  }
+
+  // ── TYPEWRITER ──
+  const phrases = [
+    'Book me on the next flight',
+    'Book me on the next flight to',
+    'Book me on the next flight to Chicago',
+  ];
+
+  function typeTranscript() {
+    const el = document.getElementById('transcriptText');
+    el.textContent = '';
+    let pIdx = 0;
+    let cIdx = 0;
+
+    if (typeInterval) clearInterval(typeInterval);
+
+    typeInterval = setInterval(() => {
+      if (pIdx >= phrases.length) {
+        clearInterval(typeInterval);
+        return;
+      }
+      const target = phrases[pIdx];
+      if (cIdx < target.length) {
+        el.textContent = target.slice(0, cIdx + 1);
+        cIdx++;
+      } else {
+        pIdx++;
+        if (pIdx < phrases.length) {
+          setTimeout(() => {
+            cIdx = phrases[pIdx - 1].length;
+          }, 400);
+        } else {
+          clearInterval(typeInterval);
+          // Auto advance to responding
+          setTimeout(() => {
+            if (states[current] === 'listening') goTo('responding');
+          }, 1200);
+        }
+      }
+    }, 55);
+  }
+
+  // Init
+  goTo('idle');
+})();
+</script>
+</body>
+</html>

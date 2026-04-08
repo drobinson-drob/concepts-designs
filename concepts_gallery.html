@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shipping and Concepts - April Week 1</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@400;500&family=Geist:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{background:#EFEFEF;font-family:'Geist',-apple-system,sans-serif;-webkit-font-smoothing:antialiased;color:#0D0D0D;}
+.hdr{padding:56px 48px 40px;border-bottom:1px solid #C8C5BE;}
+.eyebrow{font-family:'DM Mono',monospace;font-size:11px;font-weight:500;letter-spacing:0.16em;text-transform:uppercase;color:#E8281A;display:block;margin-bottom:12px;}
+h1{font-family:'Instrument Serif',serif;font-style:italic;font-size:clamp(36px,5vw,60px);font-weight:400;line-height:1.05;letter-spacing:-0.02em;color:#0D0D0D;margin-bottom:10px;}
+.cnt{font-family:'DM Mono',monospace;font-size:12px;color:#9B9890;}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;padding:2px;}
+.card{background:#fff;cursor:pointer;overflow:hidden;position:relative;transition:transform 0.2s;}
+.card:hover{transform:scale(1.01);z-index:2;}
+.card:hover .ov{opacity:1;}
+.card img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;}
+.ov{position:absolute;inset:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.2s;}
+.ov-icon{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);display:flex;align-items:center;justify-content:center;font-size:16px;color:white;}
+.info{padding:10px 12px 12px;border-top:1px solid #EFEFEF;}
+.t{font-size:12px;font-weight:500;color:#0D0D0D;margin-bottom:2px;line-height:1.3;}
+.d{font-family:'DM Mono',monospace;font-size:9px;color:#9B9890;letter-spacing:0.03em;}
+#lb{display:none;position:fixed;inset:0;z-index:999;background:rgba(0,0,0,0.92);align-items:center;justify-content:center;}
+#lb.on{display:flex;}
+#lb img{max-width:88vw;max-height:80vh;object-fit:contain;display:block;border-radius:4px;}
+.lb-wrap{display:flex;flex-direction:column;align-items:center;gap:16px;}
+.lb-meta{text-align:center;}
+.lb-meta .lt{font-family:'Instrument Serif',serif;font-style:italic;font-size:20px;color:rgba(255,255,255,0.9);}
+.lb-meta .ld{font-family:'DM Mono',monospace;font-size:10px;color:rgba(255,255,255,0.4);letter-spacing:0.08em;text-transform:uppercase;margin-top:4px;}
+.lb-meta .lc{font-family:'DM Mono',monospace;font-size:10px;color:rgba(255,255,255,0.25);margin-top:4px;}
+.lb-nav{position:fixed;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.7);font-size:18px;display:flex;align-items:center;justify-content:center;cursor:pointer;}
+.lb-nav:hover{background:rgba(255,255,255,0.18);color:#fff;}
+#lbprev{left:20px;}
+#lbnext{right:20px;}
+#lbclose{position:fixed;top:16px;right:20px;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.6);font-size:14px;display:flex;align-items:center;justify-content:center;cursor:pointer;}
+#lbclose:hover{background:rgba(255,255,255,0.18);color:#fff;}
+@media(max-width:900px){.grid{grid-template-columns:repeat(3,1fr);}}
+@media(max-width:600px){.grid{grid-template-columns:repeat(2,1fr);}}
+</style>
+</head>
+<body>
+<div class="hdr">
+  <span class="eyebrow">April 2026 / Week 1</span>
+  <h1>Shipping and Concepts</h1>
+  <span class="cnt">27 items &mdash; Product Design Team</span>
+</div>
+<div class="grid">
+<div class="card" onclick="openLb(0)">
+      <img src="Sharing%20Design/April/Week%201/Admin%20UX%20Phase%201.png" alt="Admin UX Phase 1" loading="lazy">
+      <div class="ov"><div class="ov-icon">&#9654;</div></div>
+      <div class="info"><div class="t">Admin UX Phase 1</div><div class="d">Sidenav and TMC/Org Selector</div></div>
+    </div>
+<div class="card" onclick="openLb(1)">
+      <img src="Sharing%20Design/April/Week%201/Admin%20UX%20Phase%202.png" alt="Admin UX Phase 2" loading="lazy">
+      <div class="ov"><div class="ov-icon">&#9654;</div></div>
+      <div class="info"><div class="t">Admin UX Phase 2</div><div class="d">Table</div></div>
+    </div>
+<div class="card" onclick="openLb(2)">
+      <img src="Sharing%20Design/April/Week%201/Advanced%20Filters%E2%80%A8%2B%20AI%20Filters.png" alt="Advanced Filters + AI Filters" loading="lazy">
+      <div class="ov"><div class="ov-icon">&#9654;</div></div>
+      <div class="info"><div class="t">Advanced Filters + AI Filters</div><div class="d">Consistent filters across the product</div></div>
+    </div>
+<div class="card" onclick="openLb(3)">
+      <img src="Sharing%20Design/April/Week%201/AI%20chat%20experience.png" alt="AI Chat Experience" loading="lazy">
+      <div class="ov"><div class="ov-icon">&#9654;</div></div>
+      <div class="info"><div class="t">AI Chat Experience</div><div class="d">Conversational travel search</div></div>
+    </div>
+<div class="card" onclick="openLb(4)">
+      <img src="Sharing%20Design/April/Week%201/AI%20concepts.png" alt="AI Concepts" loading="lazy">
+      <div class="ov"><div class="ov-icon">&#9654;</div></div>
+      <div class="info"><div class="t">AI Concepts</div><div class="d">AI search component explorations</div></div>
+    </div>
+<div class="card" onclick="openLb(5)">
+      <img src="Sharing%20Design/April/Week%201/AI%20Prototyping.png" alt="AI Prototyping" loading="lazy">
+      <div class="ov"><div class="ov-icon">&#9654;</div></div>
+      <div class="info"><div class="t">AI Prototyping</div><div class="d">Vibe-coded prototype for design team</div></div>
+    </div>
+<div class="card" onclick="openLb(6)">
+      <img src="Sharing%20Design/April/Week%201/Air%20Recommendation%20Engine.png" alt="Air Recommendation Engine" loading="lazy">
+      <div class="ov"><div class="ov-icon">&#9654;</div></div>
+      <div class="info"><div class="t">Air Recommendation Engine</div><div class="d">Personalized flight recommendations</div></div>
+    </div>
+<div class="card" onclick="openLb(7)">
+      <img src="Sharing%20Design/April/Week%201/Approval%20dashboard.png" alt="Approval Dashboard" loading="lazy">
+      <div class="ov"><div class="ov-icon">&#9654;</div></div>
+      <div class="info"><div class="t">Approval Dashboard</div><div class="d">Full approval workflow design</div></div>
+    </div>
+<div class="card" onclick="openLb(8)">
+      <img src="Sharing%20Design/April/Week%201/Express%20Trips%20Page%20Exchanges%20and%20Cancellations.png" alt="Express Trips Page" loading="lazy">
+      <div class="ov"><div class="ov-icon">&#9654;</div></div>
+      <div class="info"><div class="t">Express Trips Page</div><div class="d">Exchanges and Cancellations</div></div>
+    </div>
+<div class="card" onclick="openLb(9)">
+      <img src="Sharing%20Design/April/Week%201/Improve%20Adoption%20of%20Templates%20%26%20Support%20for%20Template-Free%20Event%20Creation.png" alt="Template Adoption" loading="lazy">
+      <div class="ov"><div class="ov-icon">&#9654;</div></div>
+      <div class="info"><div class="t">Template Adoption</div><div class="d">Template-free event creation</div></div>
+    </div>
+<div class="card" onclick="openLb(10)">
+      <img src="Sharing%20Design/April/Week%201/Integrations%20Self%20Serve.png" alt="Integrations Self Serve" loading="lazy">
+      <div class="ov"><div class="ov-icon">&#9654;</div></div>
+      <div class="info"><div class="t">Integrations Self Serve</div><div class="d">Self-serve integration configurations</div></div>
+    </div>
+<div class="card" onclick="openLb(11)">
+      <img src="Sharing%20Design/April/Week%201/Invoice%20Config.png" alt="Invoice Config" loading="lazy">
+      <div class="ov"><div class="ov-icon">&#9654;</div></div>
+      <div class="info"><div class="t">Invoice Config</div><div class="d">Self-serve invoice configuration</div></div>
+    </div>
+<div class="card" onclick="openLb(12)">
+      <img src="Sharing%20Design/April/Week%201/Invoice%20templates.png" alt="Invoice Templates" loading="lazy">
+      <div class="ov"><div class="ov-icon">&#9654;</div></div>
+      <div class="info"><div class="t">Invoice Templates</div><div class="d">Scalable invoice framework</div></div>
+    </div>
+<div class="card" onclick="openLb(13)">
+      <img src="Sharing%20Design/April/Week%201/Marriott%20application%20approval%20dashboard.png" alt="Marriott Approval Dashboard" loading="lazy">
+      <div class="ov"><div class="ov-icon">&#9654;</div></div>
+      <div class="info"><div class="t">Marriott Approval Dashboard</div><div class="d">Application approval for Business Access</div></div>
+    </div>
+<div class="card" onclick="openLb(14)">
+      <img src="Sharing%20Design/April/Week%201/no%20app.png" alt="No App is Good App" loading="lazy">
+      <div class="ov"><div class="ov-icon">&#9654;</div></div>
+      <div class="info"><div class="t">No App is Good App</div><div class="d">Meeting users where they already are</div></div>
+    </div>
+<div class="card" onclick="openLb(15)">
+      <img src="Sharing%20Design/April/Week%201/Policy%20Revamp.png" alt="Policy Revamp" loading="lazy">
+      <div class="ov"><div class="ov-icon">&#9654;</div></div>
+      <div class="info"><div class="t">Policy Revamp</div><div class="d">Flexible rule builder with simulator</div></div>
+    </div>
+<div class="card" onclick="openLb(16)">
+      <img src="Sharing%20Design/April/Week%201/Pre-approvals.png" alt="Pre-approvals" loading="lazy">
+      <div class="ov"><div class="ov-icon">&#9654;</div></div>
+      <div class="info"><div class="t">Pre-approvals</div><div class="d">Complete pre-approval workflow</div></div>
+    </div>
+<div class="card" onclick="openLb(17)">
+      <img src="Sharing%20Design/April/Week%201/Qantas%20updates.png" alt="Qantas Updates" loading="lazy">
+      <div class="ov"><div class="ov-icon">&#9654;</div></div>
+      <div class="info"><div class="t">Qantas Updates</div><div class="d">Checkout updates for hotel and car</div></div>
+    </div>
+<div class="card" onclick="openLb(18)">
+      <img src="Sharing%20Design/April/Week%201/Rail%20booking%20type%20updates.png" alt="Rail Booking Updates" loading="lazy">
+      <div class="ov"><div class="ov-icon">&#9654;</div></div>
+      <div class="info"><div class="t">Rail Booking Updates</div><div class="d">Seat map and passenger details</div></div>
+    </div>
+<div class="card" onclick="openLb(19)">
+      <img src="Sharing%20Design/April/Week%201/Relevant%20contacts%20%28for%20a%20trip%29%20functionality.png" alt="Relevant Trip Contacts" loading="lazy">
+      <div class="ov"><div class="ov-icon">&#9654;</div></div>
+      <div class="info"><div class="t">Relevant Trip Contacts</div><div class="d">Trip contacts and details modal</div></div>
+    </div>
+<div class="card" onclick="openLb(20)">
+      <img src="Sharing%20Design/April/Week%201/Research%20and%20conceptual%20designs%20for%20hotel%20listing%20and%20hotel%20details%20page.png" alt="Hotel Listing Research" loading="lazy">
+      <div class="ov"><div class="ov-icon">&#9654;</div></div>
+      <div class="info"><div class="t">Hotel Listing Research</div><div class="d">Hotel listing and details concepts</div></div>
+    </div>
+<div class="card" onclick="openLb(21)">
+      <img src="Sharing%20Design/April/Week%201/Search%20component_01.png" alt="Search Component" loading="lazy">
+      <div class="ov"><div class="ov-icon">&#9654;</div></div>
+      <div class="info"><div class="t">Search Component</div><div class="d">Unified search across all booking types</div></div>
+    </div>
+<div class="card" onclick="openLb(22)">
+      <img src="Sharing%20Design/April/Week%201/Search%20component_02.png" alt="Search Component Design System" loading="lazy">
+      <div class="ov"><div class="ov-icon">&#9654;</div></div>
+      <div class="info"><div class="t">Search Component Design System</div><div class="d">Design system for new search</div></div>
+    </div>
+<div class="card" onclick="openLb(23)">
+      <img src="Sharing%20Design/April/Week%201/Seatmap.png" alt="Seatmap" loading="lazy">
+      <div class="ov"><div class="ov-icon">&#9654;</div></div>
+      <div class="info"><div class="t">Seatmap</div><div class="d">Accurate aircraft-specific seat layouts</div></div>
+    </div>
+<div class="card" onclick="openLb(24)">
+      <img src="Sharing%20Design/April/Week%201/Spotnana%20%20UX%20research%20platform.png" alt="UX Research Platform" loading="lazy">
+      <div class="ov"><div class="ov-icon">&#9654;</div></div>
+      <div class="info"><div class="t">UX Research Platform</div><div class="d">AI-powered research evidence hub</div></div>
+    </div>
+<div class="card" onclick="openLb(25)">
+      <img src="Sharing%20Design/April/Week%201/Trip%20Activity%20panel%20for%20Agents.png" alt="Trip Activity Panel" loading="lazy">
+      <div class="ov"><div class="ov-icon">&#9654;</div></div>
+      <div class="info"><div class="t">Trip Activity Panel</div><div class="d">Consolidated agent console</div></div>
+    </div>
+<div class="card" onclick="openLb(26)">
+      <img src="Sharing%20Design/April/Week%201/Trip%20details.png" alt="Trip Details Revamp" loading="lazy">
+      <div class="ov"><div class="ov-icon">&#9654;</div></div>
+      <div class="info"><div class="t">Trip Details Revamp</div><div class="d">Unified design across all booking types</div></div>
+    </div>
+
+</div>
+
+<div id="lb">
+  <div id="lbclose" onclick="closeLb()">&#x2715;</div>
+  <div id="lbprev" class="lb-nav" onclick="nav(-1)">&#8592;</div>
+  <div id="lbnext" class="lb-nav" onclick="nav(1)">&#8594;</div>
+  <div class="lb-wrap">
+    <img id="lbimg" src="" alt="">
+    <div class="lb-meta">
+      <div class="lt" id="lbt"></div>
+      <div class="ld" id="lbd"></div>
+      <div class="lc" id="lbc"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+var cur = 0;
+var cards = document.querySelectorAll('.card');
+
+function openLb(i) {
+  cur = i;
+  show();
+  document.getElementById('lb').classList.add('on');
+}
+
+function closeLb() {
+  document.getElementById('lb').classList.remove('on');
+}
+
+function nav(d) {
+  cur = (cur + d + cards.length) % cards.length;
+  show();
+}
+
+function show() {
+  var c = cards[cur];
+  document.getElementById('lbimg').src = c.querySelector('img').src;
+  document.getElementById('lbt').textContent = c.querySelector('.t').textContent;
+  document.getElementById('lbd').textContent = c.querySelector('.d').textContent;
+  document.getElementById('lbc').textContent = (cur+1) + ' / ' + cards.length;
+}
+
+document.getElementById('lb').addEventListener('click', function(e) {
+  if (e.target === this) closeLb();
+});
+
+document.addEventListener('keydown', function(e) {
+  if (!document.getElementById('lb').classList.contains('on')) return;
+  if (e.key==='ArrowRight') nav(1);
+  if (e.key==='ArrowLeft') nav(-1);
+  if (e.key==='Escape') closeLb();
+});
+</script>
+</body>
+</html>

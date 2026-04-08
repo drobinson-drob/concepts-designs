@@ -1,0 +1,1691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI-Native Travel: Spotnana</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@300;400;500&family=Geist:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --red: #E8281A;
+    --ink: #0D0D0D;
+    --ink-60: #3D3D38;
+    --ink-30: #9B9890;
+    --border: #C8C5BE;
+    --paper: #EFEFEF;
+    --white: #FFFFFF;
+    --mono: 'DM Mono', monospace;
+    --serif: 'Instrument Serif', Georgia, serif;
+    --sans: 'Geist', -apple-system, sans-serif;
+  }
+
+  html { font-size: 16px; scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-weight: 400;
+  }
+
+  /* ── RADIO TAB SYSTEM ── */
+  /* Hide all radio inputs */
+  .tab-radio { display: none; }
+
+  /* Hide all panels by default */
+  .panel { display: none; padding: 72px 48px 120px; max-width: 1080px; margin: 0 auto; }
+
+  /* Show panel when its radio is checked */
+  #tab-home:checked       ~ .site #panel-home,
+  #tab-thesis:checked     ~ .site #panel-thesis,
+  #tab-principles:checked ~ .site #panel-principles,
+  #tab-traveler:checked   ~ .site #panel-traveler,
+  #tab-agent:checked      ~ .site #panel-agent,
+  #tab-tmc:checked        ~ .site #panel-tmc,
+  #tab-admin:checked      ~ .site #panel-admin,
+  #tab-roadmap:checked    ~ .site #panel-roadmap,
+  #tab-gallery:checked    ~ .site #panel-gallery { display: block; }
+
+  /* Nav tab active state */
+  #tab-home:checked       ~ .site .nav label[for="tab-home"],
+  #tab-thesis:checked     ~ .site .nav label[for="tab-thesis"],
+  #tab-principles:checked ~ .site .nav label[for="tab-principles"],
+  #tab-traveler:checked   ~ .site .nav label[for="tab-traveler"],
+  #tab-agent:checked      ~ .site .nav label[for="tab-agent"],
+  #tab-tmc:checked        ~ .site .nav label[for="tab-tmc"],
+  #tab-admin:checked      ~ .site .nav label[for="tab-admin"],
+  #tab-roadmap:checked    ~ .site .nav label[for="tab-roadmap"],
+  #tab-gallery:checked    ~ .site .nav label[for="tab-gallery"] {
+    color: var(--ink);
+    font-weight: 500;
+    border-bottom-color: var(--red);
+  }
+
+  /* ── NAV ── */
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(239,239,239,0.95);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-inner {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 48px;
+    display: flex;
+    align-items: center;
+    height: 56px;
+  }
+
+  .nav-wordmark {
+    color: var(--ink);
+    text-decoration: none;
+    padding-right: 24px;
+    margin-right: 8px;
+    border-right: 1px solid var(--border);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+  }
+
+  .nav-wordmark img {
+    display: block;
+    height: 20px;
+    width: auto;
+  }
+
+  .nav-tabs { display: flex; align-items: stretch; height: 100%; }
+
+  .nav-tabs label {
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--ink-60);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: color 0.15s;
+    white-space: nowrap;
+    height: 100%;
+    letter-spacing: 0.01em;
+  }
+
+  .nav-tabs label:hover { color: var(--ink); }
+
+  /* ── SHARED COMPONENTS ── */
+  .header {
+    margin-bottom: 64px;
+    padding-bottom: 52px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--red);
+    display: block;
+    margin-bottom: 20px;
+  }
+
+  h1 {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: clamp(40px, 6vw, 68px);
+    font-weight: 400;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin-bottom: 18px;
+    max-width: 720px;
+  }
+
+  .lead {
+    font-size: 17px;
+    line-height: 1.75;
+    color: var(--ink-60);
+    max-width: 520px;
+  }
+
+  .section-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-60);
+    display: block;
+    margin-bottom: 12px;
+  }
+
+  .section-title {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: clamp(26px, 3vw, 38px);
+    font-weight: 400;
+    color: var(--ink);
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+    line-height: 1.15;
+  }
+
+  .section-sub {
+    font-size: 15px;
+    color: var(--ink-60);
+    line-height: 1.7;
+    max-width: 520px;
+    margin-bottom: 32px;
+  }
+
+  .section-block { margin-bottom: 72px; }
+
+  /* Cards */
+  .card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 32px 36px;
+    margin-bottom: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--red);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.35s cubic-bezier(0.16,1,0.3,1);
+  }
+
+  .card:hover::after { transform: scaleX(1); }
+
+  .card-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-30);
+    display: block;
+    margin-bottom: 12px;
+  }
+
+  .card h2 {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 24px;
+    font-weight: 400;
+    color: var(--ink);
+    margin-bottom: 12px;
+    line-height: 1.2;
+  }
+
+  .card h3 {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 20px;
+    font-weight: 400;
+    color: var(--ink);
+    margin-bottom: 10px;
+    line-height: 1.2;
+  }
+
+  .card p {
+    font-size: 15px;
+    color: var(--ink-60);
+    line-height: 1.8;
+  }
+
+  /* AI bubble */
+  .bubble {
+    background: var(--paper);
+    border: 1px solid var(--border);
+    border-left: 2px solid var(--red);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin-top: 18px;
+  }
+
+  .bubble-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--red);
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  .bubble p {
+    font-size: 14px;
+    font-style: italic;
+    color: var(--ink-60);
+    line-height: 1.7;
+  }
+
+  /* Chips */
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+
+  .chip {
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 4px 11px;
+    border-radius: 999px;
+    border: 1px solid;
+  }
+
+  .chip-red   { color: #C01E10; border-color: rgba(192,30,16,0.3); background: rgba(232,40,26,0.06); }
+  .chip-ink   { color: var(--ink-60); border-color: var(--border); background: var(--paper); }
+  .chip-teal  { color: #07402F; border-color: rgba(10,92,70,0.3); background: rgba(10,92,70,0.06); }
+  .chip-amber { color: #5C3508; border-color: rgba(122,74,10,0.3); background: rgba(122,74,10,0.06); }
+  .chip-blue  { color: #093060; border-color: rgba(12,68,124,0.3); background: rgba(12,68,124,0.06); }
+
+  /* Grids */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+  .grid-2 .card, .grid-3 .card { margin-bottom: 0; }
+
+  /* Stat row */
+  .stat-row {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+
+  .stat { background: var(--white); padding: 28px 32px; }
+
+  .stat-num {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 44px;
+    font-weight: 400;
+    color: var(--ink);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .stat-num em { font-style: normal; color: var(--red); }
+  .stat-desc { font-size: 13px; color: var(--ink-60); line-height: 1.6; }
+
+  /* Principle band */
+  .principle-band {
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 64px;
+  }
+
+  .principle { background: var(--white); padding: 24px 26px 28px; }
+
+  .principle-num {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--red);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 14px;
+  }
+
+  .principle-title {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 18px;
+    color: var(--ink);
+    margin-bottom: 10px;
+    line-height: 1.2;
+  }
+
+  .principle-body { font-size: 13px; line-height: 1.8; color: var(--ink-60); }
+
+  /* Dark card */
+  .card-dark {
+    background: var(--ink);
+    border-color: var(--ink);
+    margin-bottom: 0;
+  }
+
+  .card-dark::after { background: var(--red); }
+  .card-dark .card-label { color: rgba(255,255,255,0.45); }
+  .card-dark h2 { color: var(--white); }
+  .card-dark h3 { color: var(--white); }
+  .card-dark p  { color: rgba(255,255,255,0.72); }
+  .card-dark .bubble { background: rgba(255,255,255,0.07); border-color: rgba(255,255,255,0.15); border-left-color: var(--red); }
+  .card-dark .bubble p { color: rgba(255,255,255,0.72); }
+  .card-dark .chip-red   { color: #FF9B95; background: rgba(232,40,26,0.15); border-color: rgba(232,40,26,0.3); }
+  .card-dark .chip-ink   { color: rgba(255,255,255,0.6); border-color: rgba(255,255,255,0.2); background: transparent; }
+  .card-dark .chip-teal  { color: #5DCAA5; border-color: rgba(93,202,165,0.3); background: rgba(93,202,165,0.08); }
+  .card-dark .chip-blue  { color: #85B7EB; border-color: rgba(133,183,235,0.3); background: rgba(133,183,235,0.08); }
+  .card-dark .chip-amber { color: #FAC775; border-color: rgba(250,199,117,0.3); background: rgba(250,199,117,0.08); }
+
+  
+
+/* Concepts gallery */
+#panel-gallery .grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2px;
+  padding: 2px;
+}
+#panel-gallery .card {
+  background: #FFFFFF;
+  cursor: pointer;
+  overflow: hidden;
+  position: relative;
+  transition: transform 0.2s cubic-bezier(0.16,1,0.3,1);
+}
+#panel-gallery .card:hover { transform: scale(1.01); z-index: 2; }
+#panel-gallery .card:hover .card-overlay { opacity: 1; }
+#panel-gallery .card-img {
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  display: block;
+}
+#panel-gallery .card-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(13,13,13,0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+#panel-gallery .card-overlay-icon {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.3);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; color: white;
+}
+#panel-gallery .card-meta {
+  padding: 12px 14px 14px;
+  border-top: 1px solid #EFEFEF;
+}
+#panel-gallery .card-title {
+  font-size: 13px;
+  font-weight: 500;
+  color: #0D0D0D;
+  margin-bottom: 3px;
+  line-height: 1.3;
+}
+#panel-gallery .card-desc {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: #9B9890;
+  letter-spacing: 0.03em;
+  line-height: 1.4;
+}
+
+.roadmap-quarter {
+  margin-bottom: 88px;
+}
+
+.roadmap-quarter:last-child {
+  margin-bottom: 0;
+}
+
+.roadmap-kicker {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 22px;
+  flex-wrap: wrap;
+}
+
+.roadmap-kicker .section-title {
+  margin-bottom: 0;
+}
+
+.roadmap-chipline {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.sprint-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.sprint-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 28px 30px;
+}
+
+.sprint-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.sprint-tag {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--red);
+}
+
+.sprint-window {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-30);
+}
+
+.sprint-card h3 {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 28px;
+  font-weight: 400;
+  line-height: 1.1;
+  margin-bottom: 10px;
+}
+
+.sprint-summary {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--ink-60);
+  margin-bottom: 18px;
+}
+
+.viz-list {
+  display: grid;
+  gap: 12px;
+}
+
+.viz-item {
+  padding-top: 12px;
+  border-top: 1px solid #ECE9E2;
+}
+
+.viz-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-30);
+  display: block;
+  margin-bottom: 6px;
+}
+
+.viz-item p {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--ink-60);
+}
+
+#lightbox {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(0,0,0,0.92);
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(12px);
+}
+#lightbox.open { display: flex; }
+.lb-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 90vw;
+  max-height: 90vh;
+  position: relative;
+}
+#lb-img {
+  max-width: 88vw;
+  max-height: 76vh;
+  object-fit: contain;
+  border-radius: 4px;
+  display: block;
+  box-shadow: 0 32px 80px rgba(0,0,0,0.5);
+}
+.lb-meta {
+  margin-top: 20px;
+  text-align: center;
+}
+.lb-title {
+  font-family: 'Instrument Serif', serif;
+  font-style: italic;
+  font-size: 22px;
+  font-weight: 400;
+  color: rgba(255,255,255,0.9);
+  margin-bottom: 4px;
+}
+.lb-desc {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: rgba(255,255,255,0.4);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.lb-counter {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: rgba(255,255,255,0.3);
+  margin-top: 8px;
+  letter-spacing: 0.06em;
+}
+.lb-btn {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.7);
+  font-size: 18px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  user-select: none;
+}
+.lb-btn:hover { background: rgba(255,255,255,0.15); color: white; }
+#lb-prev { left: 24px; }
+#lb-next { right: 24px; }
+#lb-close {
+  position: fixed;
+  top: 20px; right: 24px;
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.6);
+  font-size: 16px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+}
+#lb-close:hover { background: rgba(255,255,255,0.15); color: white; }
+.lb-keys {
+  position: fixed;
+  bottom: 20px;
+  left: 50%; transform: translateX(-50%);
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: rgba(255,255,255,0.2);
+  letter-spacing: 0.08em;
+}
+@media (max-width: 900px) { #panel-gallery .grid { grid-template-columns: repeat(3,1fr); } .sprint-grid { grid-template-columns: 1fr; } }
+@media (max-width: 600px) { #panel-gallery .grid { grid-template-columns: repeat(2,1fr); } }
+
+/* ── THESIS-SPECIFIC ── */
+.vs-split { display: grid; grid-template-columns: 1fr 1fr; gap: 0; margin-bottom: 16px; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+.vs-side { padding: 32px 36px; }
+.vs-side:first-child { background: var(--white); border-right: 1px solid var(--border); }
+.vs-side:last-child { background: var(--ink); }
+.vs-side:last-child .card-label { color: rgba(255,255,255,0.45); }
+.vs-side:last-child h3 { font-family: var(--serif); font-style: italic; font-size: 20px; font-weight: 400; color: #fff; margin-bottom: 10px; line-height: 1.2; }
+.vs-side:last-child p { font-size: 15px; color: rgba(255,255,255,0.72); line-height: 1.8; }
+.vs-side:last-child .chip-red { color: #FF9B95; background: rgba(232,40,26,0.15); border-color: rgba(232,40,26,0.3); }
+.vs-side h3 { font-family: var(--serif); font-style: italic; font-size: 20px; font-weight: 400; color: var(--ink); margin-bottom: 10px; line-height: 1.2; }
+.vs-side p { font-size: 15px; color: var(--ink-60); line-height: 1.8; }
+.vs-side .card-label { font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-30); display: block; margin-bottom: 12px; }
+
+.flow-strip { display: flex; align-items: stretch; gap: 0; margin-bottom: 16px; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+.flow-step { flex: 1; padding: 22px 20px; background: var(--white); text-align: center; border-right: 1px solid var(--border); position: relative; }
+.flow-step:last-child { border-right: none; }
+.flow-step-num { font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--red); display: block; margin-bottom: 8px; }
+.flow-step-label { font-family: var(--serif); font-style: italic; font-size: 17px; color: var(--ink); line-height: 1.2; }
+.flow-step::after { content: '\2192'; position: absolute; right: -10px; top: 50%; transform: translateY(-50%); font-size: 14px; color: var(--ink-30); z-index: 1; }
+.flow-step:last-child::after { display: none; }
+
+.flow-strip.flow-new .flow-step { background: var(--ink); }
+.flow-strip.flow-new .flow-step { border-right-color: rgba(255,255,255,0.12); }
+.flow-strip.flow-new .flow-step-num { color: var(--red); }
+.flow-strip.flow-new .flow-step-label { color: #fff; }
+.flow-strip.flow-new .flow-step::after { color: rgba(255,255,255,0.3); }
+.flow-strip.flow-new { border-color: var(--ink); }
+
+.intent-band { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 16px; }
+.intent-layer { background: var(--white); padding: 28px 26px 32px; }
+.intent-layer-num { font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; color: var(--red); text-transform: uppercase; display: block; margin-bottom: 14px; }
+.intent-layer-title { font-family: var(--serif); font-style: italic; font-size: 18px; color: var(--ink); margin-bottom: 10px; line-height: 1.2; }
+.intent-layer-body { font-size: 13px; line-height: 1.8; color: var(--ink-60); }
+
+.mock-card-old, .mock-card-new { border-radius: 10px; padding: 24px 28px; margin-top: 18px; }
+.mock-card-old { background: #F8F7F5; border: 1px solid var(--border); }
+.mock-card-new { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); }
+.mock-line { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+.mock-line:last-child { margin-bottom: 0; }
+.mock-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.mock-dot-grey { background: var(--ink-30); }
+.mock-dot-red { background: var(--red); }
+.mock-dot-green { background: #30D158; }
+.mock-text { font-size: 13px; color: var(--ink-60); line-height: 1.5; }
+.mock-card-new .mock-text { color: rgba(255,255,255,0.72); }
+.mock-card-new .mock-dot-grey { background: rgba(255,255,255,0.3); }
+
+@media (max-width: 900px) { .vs-split { grid-template-columns: 1fr; } .vs-side:first-child { border-right: none; border-bottom: 1px solid var(--border); } .flow-strip { flex-wrap: wrap; } .flow-step { min-width: 50%; } .intent-band { grid-template-columns: 1fr; } }
+
+</style>
+</head>
+<body>
+
+<!-- Radio inputs must come BEFORE .site for CSS sibling selectors to work -->
+<input class="tab-radio" type="radio" name="tabs" id="tab-home"     checked>
+<input class="tab-radio" type="radio" name="tabs" id="tab-thesis">
+<input class="tab-radio" type="radio" name="tabs" id="tab-principles">
+<input class="tab-radio" type="radio" name="tabs" id="tab-traveler">
+<input class="tab-radio" type="radio" name="tabs" id="tab-agent">
+<input class="tab-radio" type="radio" name="tabs" id="tab-tmc">
+<input class="tab-radio" type="radio" name="tabs" id="tab-admin">
+<input class="tab-radio" type="radio" name="tabs" id="tab-roadmap">
+<input class="tab-radio" type="radio" name="tabs" id="tab-gallery">
+
+<div class="site">
+
+  <nav class="nav">
+    <div class="nav-inner">
+      <a class="nav-wordmark" href="#" aria-label="Spotnana">
+        <img src="assets/spotnana-primary.svg" alt="Spotnana">
+      </a>
+      <div class="nav-tabs">
+        <label for="tab-home">Home</label>
+        <label for="tab-thesis">Thesis</label>
+        <label for="tab-principles">Principles</label>
+        <label for="tab-traveler">Traveler</label>
+        <label for="tab-agent">Agent</label>
+        <label for="tab-tmc">TMC</label>
+        <label for="tab-admin">EA</label>
+        <!-- <label for="tab-roadmap">Roadmap</label> -->
+        <label for="tab-gallery">Gallery</label>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ══ HOME ══ -->
+  <div class="panel" id="panel-home">
+    <div class="header">
+      <span class="eyebrow">UX &amp; Design direction, 2026</span>
+      <h1>From discovery to confirmation</h1>
+      <p class="lead">Corporate travel will not be driven by filters and sort orders. It will be driven by accumulated intent. We design interfaces around confirmation &mdash; not discovery. The traveler doesn't search. The traveler confirms.</p>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat"><div class="stat-num">3</div><div class="stat-desc">Layers of prior intent the platform already holds &mdash; individual, organizational, TMC</div></div>
+      <div class="stat"><div class="stat-num">4<em>x</em></div><div class="stat-desc">Core surfaces redesigned around resolution: traveler, agent, TMC, admin</div></div>
+      <div class="stat"><div class="stat-num">1</div><div class="stat-desc">Confirmation replaces the 14-step search-filter-compare-book cycle</div></div>
+    </div>
+
+    <div class="section-block">
+      <span class="section-label">Core design shifts</span>
+      <div class="principle-band">
+        <div class="principle"><span class="principle-num">01</span><div class="principle-title">From search to resolution</div><p class="principle-body">The system resolves intent before the traveler types a character. The UI becomes a confirmation surface, not a query tool. Three options, all compliant, all optimized.</p></div>
+        <div class="principle"><span class="principle-num">02</span><div class="principle-title">From listings to reasoning</div><p class="principle-body">Cards stop showing generic data. They lead with signals that matter to this traveler: loyalty rate, preference match, savings vs. public fare, booking history.</p></div>
+        <div class="principle"><span class="principle-num">03</span><div class="principle-title">From gating to guardrailing</div><p class="principle-body">Policy resolves before results load. The traveler never sees a violation warning because every option shown is already compliant. Exceptions surface as conversations, not errors.</p></div>
+        <div class="principle"><span class="principle-num">04</span><div class="principle-title">From checkout to confirm</div><p class="principle-body">Loyalty numbers, payment, seat preferences, room preferences, approval chain &mdash; all known. Nothing left to fill in. One screen. Done.</p></div>
+      </div>
+    </div>
+
+    <div class="section-block">
+      <span class="section-label">UX opportunity areas</span>
+      <div class="section-title">Where design does its most important work</div>
+      <p class="section-sub">The interfaces that remain after automation are the ones that matter most: communicating AI reasoning, building trust, and handling edge cases gracefully.</p>
+      <div class="grid-2">
+        <div class="card"><span class="card-label">Opportunity 01</span><h3>Explainable proposals</h3><p>When the AI drafts a trip, users need to understand why each choice was made, not just what was chosen. Surfacing policy reasoning and preference matching builds trust faster than accuracy alone.</p><div class="chips"><span class="chip chip-red">Trust design</span><span class="chip chip-red">Reasoning transparency</span></div></div>
+        <div class="card"><span class="card-label">Opportunity 02</span><h3>Graceful escalation</h3><p>The moments where AI hands back to a human are the highest-stakes UX moments in the system. What does a well-designed exception look like?</p><div class="chips"><span class="chip chip-amber">Exception handling</span><span class="chip chip-amber">Interruption design</span></div></div>
+        <div class="card"><span class="card-label">Opportunity 03</span><h3>Control without friction</h3><p>Travelers who want to override or customize the AI's work need a clear path without it feeling like punishment. Power user depth shouldn't compromise the zero-effort default.</p><div class="chips"><span class="chip chip-blue">Progressive disclosure</span><span class="chip chip-blue">Override patterns</span></div></div>
+        <div class="card"><span class="card-label">Opportunity 04</span><h3>Ambient awareness</h3><p>Travelers need to know the AI is watching without being constantly notified. Designing a calm status layer that only breaks through when something genuinely requires attention is a new unsolved design problem.</p><div class="chips"><span class="chip chip-teal">Notification design</span><span class="chip chip-teal">Passive monitoring UI</span></div></div>
+      </div>
+      <div class="grid-2">
+        <div class="card"><span class="card-label">Opportunity 05</span><h3>Identity and context persistence</h3><p>The AI is only as good as its understanding of the traveler. Interfaces that let users inspect, correct, and build their travel profile are foundational infrastructure for the whole system.</p><div class="chips"><span class="chip chip-ink">Profile management</span><span class="chip chip-ink">Preference modeling</span></div></div>
+        <div class="card"><span class="card-label">Opportunity 06</span><h3>Multi-persona orchestration</h3><p>Traveler, agent, TMC, and admin are all in the same trip with different views, permissions, and needs. Designing a shared data model with role-based surfaces is architecturally and experientially complex.</p><div class="chips"><span class="chip chip-red">Role-based UI</span><span class="chip chip-red">Shared trip state</span></div></div>
+      </div>
+      <div class="card"><span class="card-label">Opportunity 07: Voice UX</span><h2>Voice and visual, working together</h2><p>Voice doesn't replace the screen. It adds a layer on top of it. A traveler might speak a request hands-free and then see the options rendered visually before confirming. The design challenge is knowing which modality carries which part of the interaction: voice for input and quick confirmations, screen for complex comparisons and high-stakes decisions. The visual UI and the voice UI have to feel like one coherent system.</p><div class="bubble"><span class="bubble-label">Voice interaction</span><p>"Book me on the next flight to Austin." / "I found two options: Delta at 4:15, $310 within policy, or United at 3:45, same price, middle seat. Which works?" / "Delta, but can you get me an aisle?" / "Done. UA 492, aisle 14C, confirmed."</p></div><div class="chips"><span class="chip chip-red">Conversational flow design</span><span class="chip chip-red">Spoken confirmation patterns</span><span class="chip chip-amber">Modality switching</span><span class="chip chip-blue">Hands-free contexts</span></div></div>
+    </div>
+
+    <div class="card card-dark">
+      <span class="card-label">Why these design choices matter</span>
+      <h2>We are designing for the future, not optimizing for today</h2>
+      <p>The next generation of corporate booking interfaces will not look like search results pages with smarter filters. They will look like a concierge that already did the research, already checked the policy, already applied the preferences, and is presenting a resolved answer. The design challenge is no longer how to display more information. It is how to display less &mdash; because the intelligence layer already did the work.</p>
+      <div class="chips" style="margin-top:18px"><span class="chip chip-red">Accumulated intent</span><span class="chip chip-red">Confirmation over discovery</span><span class="chip chip-teal">Traveler graph architecture</span><span class="chip chip-blue">Structural leverage</span></div>
+    </div>
+  </div>
+
+  <!-- ══ THESIS ══ -->
+  <div class="panel" id="panel-thesis">
+    <div class="header">
+      <span class="eyebrow">The strategic argument</span>
+      <h1>Distribution is the story</h1>
+      <p class="lead">Travel demand isn't weakening. Control over where demand flows is breaking apart. The platforms that understand the traveler before the search will hold structural leverage no incumbent can replicate by adding a chatbot to a listing page.</p>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat"><div class="stat-num">20<em>yr</em></div><div class="stat-desc">The travel commerce model has not meaningfully changed. Search, aggregate, compare, extract 15-25% margin.</div></div>
+      <div class="stat"><div class="stat-num">3</div><div class="stat-desc">Layers of prior intent the platform already holds: individual, organizational, and TMC.</div></div>
+      <div class="stat"><div class="stat-num">1</div><div class="stat-desc">Confirmation replaces the entire search-filter-compare-book cycle for a compliant trip.</div></div>
+    </div>
+
+    <div class="section-block">
+      <span class="section-label">The paradigm shift</span>
+      <div class="section-title">AI is a resolver, not a page</div>
+      <p class="section-sub">A listing page rewards whoever has the most inventory and the best sort algorithm. An AI resolver rewards whoever has built the deepest understanding of what this specific traveler actually needs.</p>
+
+      <div class="vs-split">
+        <div class="vs-side">
+          <span class="card-label">Today's model</span>
+          <h3>200 results. Figure it out.</h3>
+          <p>Search form, wall of listings, 14 filters, sort by price. The traveler is the query engine. They scan, compare, check policy indicators, hit a violation, go back, try again.</p>
+          <div class="mock-card-old">
+            <div class="mock-line"><span class="mock-dot mock-dot-grey"></span><span class="mock-text">Search: New York, Mar 15-17</span></div>
+            <div class="mock-line"><span class="mock-dot mock-dot-grey"></span><span class="mock-text">200 hotels returned</span></div>
+            <div class="mock-line"><span class="mock-dot mock-dot-grey"></span><span class="mock-text">Filter: price, stars, distance...</span></div>
+            <div class="mock-line"><span class="mock-dot mock-dot-grey"></span><span class="mock-text">Select one &rarr; policy violation</span></div>
+            <div class="mock-line"><span class="mock-dot mock-dot-grey"></span><span class="mock-text">Go back, try again</span></div>
+          </div>
+        </div>
+        <div class="vs-side">
+          <span class="card-label">The resolved model</span>
+          <h3>We already know. Confirm.</h3>
+          <p>The platform decomposes constraints, matches real supply, applies three layers of intent, and presents a ranked shortlist. Every option already verified.</p>
+          <div class="mock-card-new">
+            <div class="mock-line"><span class="mock-dot mock-dot-green"></span><span class="mock-text">Courtyard Midtown East &middot; $189 negotiated</span></div>
+            <div class="mock-line"><span class="mock-dot mock-dot-green"></span><span class="mock-text">Marriott Platinum rate &middot; King, high floor</span></div>
+            <div class="mock-line"><span class="mock-dot mock-dot-green"></span><span class="mock-text">Same property, last 3 NYC trips</span></div>
+            <div class="mock-line"><span class="mock-dot mock-dot-red"></span><span class="mock-text">Saves $42/night vs. best public rate</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bubble">
+        <span class="bubble-label">Structured request (not a search query)</span>
+        <p>"I need a hotel near the client office in Midtown, on our preferred list, under policy rate. I land at 11pm so I need guaranteed late check-in." &mdash; Location, policy compliance, rate limits, program membership, operational needs. A listing page with star ratings and price filters cannot even represent the full problem.</p>
+      </div>
+    </div>
+
+    <div class="section-block">
+      <span class="section-label">The intelligence layer</span>
+      <div class="section-title">Three layers of accumulated intent</div>
+      <p class="section-sub">The platform already holds the data to eliminate search entirely. The question is who uses it first.</p>
+
+      <div class="intent-band">
+        <div class="intent-layer">
+          <span class="intent-layer-num">Layer 01</span>
+          <div class="intent-layer-title">Individual</div>
+          <p class="intent-layer-body">Booking history, loyalty programs and status tiers, seat and room preferences, ancillary patterns (lounge access, early check-in, wifi), upgrade acceptance patterns, payment methods.</p>
+        </div>
+        <div class="intent-layer">
+          <span class="intent-layer-num">Layer 02</span>
+          <div class="intent-layer-title">Organizational</div>
+          <p class="intent-layer-body">Negotiated rates by property and airline, corporate policy boundaries, approval chains, travel patterns across hundreds of employees, cohort behavior for similar role and destination.</p>
+        </div>
+        <div class="intent-layer">
+          <span class="intent-layer-num">Layer 03</span>
+          <div class="intent-layer-title">TMC</div>
+          <p class="intent-layer-body">Preferred supplier agreements, contracted fares, program-level optimization targets, cross-client pattern intelligence, duty-of-care obligations.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="card-label">The recommendation engine</span>
+        <h2>Pre-computed before you open the app</h2>
+        <p>Before the traveler opens the booking tool for a trip to New York, the platform has already resolved the top three hotels based on this traveler's history, loyalty tier benefits, the company's negotiated rate at each property, policy boundaries, and TMC supplier preferences. The same logic applies to air, ground, and ancillaries. Individual behavior, cohort behavior, and commercial constraints combined into a single ranked result.</p>
+        <div class="chips"><span class="chip chip-red">Traveler graph</span><span class="chip chip-red">Q2-Q3 2026 launch</span><span class="chip chip-teal">Pre-computed ranking</span><span class="chip chip-blue">Cross-layer optimization</span></div>
+      </div>
+    </div>
+
+    <div class="section-block">
+      <span class="section-label">The UI consequence</span>
+      <div class="section-title">Everything about the interface changes</div>
+      <p class="section-sub">The objective of the booking tool is for travelers to spend as little time on it as possible. When upstream intelligence does the work, the interface fundamentally transforms.</p>
+
+      <span class="section-label" style="margin-top:32px">Old flow</span>
+      <div class="flow-strip">
+        <div class="flow-step"><span class="flow-step-num">Step 1</span><span class="flow-step-label">Open tool</span></div>
+        <div class="flow-step"><span class="flow-step-num">Step 2</span><span class="flow-step-label">Type city &amp; dates</span></div>
+        <div class="flow-step"><span class="flow-step-num">Step 3</span><span class="flow-step-label">200 results load</span></div>
+        <div class="flow-step"><span class="flow-step-num">Step 4</span><span class="flow-step-label">Apply filters</span></div>
+        <div class="flow-step"><span class="flow-step-num">Step 5</span><span class="flow-step-label">Compare &amp; select</span></div>
+        <div class="flow-step"><span class="flow-step-num">Step 6</span><span class="flow-step-label">Fill checkout</span></div>
+      </div>
+
+      <span class="section-label">New flow</span>
+      <div class="flow-strip flow-new">
+        <div class="flow-step"><span class="flow-step-num">Step 1</span><span class="flow-step-label">System resolves intent</span></div>
+        <div class="flow-step"><span class="flow-step-num">Step 2</span><span class="flow-step-label">Review 3 options</span></div>
+        <div class="flow-step"><span class="flow-step-num">Step 3</span><span class="flow-step-label">Confirm</span></div>
+      </div>
+
+      <div class="grid-2" style="margin-top:24px">
+        <div class="card">
+          <span class="card-label">What disappears</span>
+          <h3>Search forms, filter columns, sort menus</h3>
+          <p>The search form shrinks or disappears &mdash; the system already knows where you're going from your calendar. Filters become unnecessary because every option shown is already compliant. Sort vanishes because ranking is contextual and personal, not generic.</p>
+          <div class="chips"><span class="chip chip-ink">No search form</span><span class="chip chip-ink">No filter sidebar</span><span class="chip chip-ink">No sort dropdown</span><span class="chip chip-ink">No 200 results</span></div>
+        </div>
+        <div class="card">
+          <span class="card-label">What replaces it</span>
+          <h3>Curated shortlist with visible reasoning</h3>
+          <p>Three to five resolved recommendations. Each verified against policy, preferred programs, negotiated rates, and personal preferences. The card doesn't present data to evaluate &mdash; it presents a recommendation with reasoning already shown.</p>
+          <div class="chips"><span class="chip chip-red">3-5 options</span><span class="chip chip-red">Reasoning inline</span><span class="chip chip-teal">Pre-verified</span><span class="chip chip-teal">One-click book</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-block">
+      <span class="section-label">Card design shift</span>
+      <div class="section-title">The hotel card, reimagined</div>
+      <p class="section-sub">Information hierarchy follows what matters to this traveler, not what the system defaults to.</p>
+
+      <div class="vs-split">
+        <div class="vs-side">
+          <span class="card-label">Today's card</span>
+          <h3>Generic data for everyone</h3>
+          <div class="mock-card-old">
+            <div class="mock-line"><span class="mock-dot mock-dot-grey"></span><span class="mock-text">Courtyard by Marriott Midtown East</span></div>
+            <div class="mock-line"><span class="mock-dot mock-dot-grey"></span><span class="mock-text">&starf;&starf;&starf;&starf; &middot; 0.4 mi from center</span></div>
+            <div class="mock-line"><span class="mock-dot mock-dot-grey"></span><span class="mock-text">$231 / night</span></div>
+            <div class="mock-line"><span class="mock-dot mock-dot-grey"></span><span class="mock-text">Free cancellation</span></div>
+          </div>
+        </div>
+        <div class="vs-side">
+          <span class="card-label">Resolved card</span>
+          <h3>Personal context, up front</h3>
+          <div class="mock-card-new">
+            <div class="mock-line"><span class="mock-dot mock-dot-green"></span><span class="mock-text">Your Marriott Platinum rate &middot; $189</span></div>
+            <div class="mock-line"><span class="mock-dot mock-dot-green"></span><span class="mock-text">King bed, high floor (your preference)</span></div>
+            <div class="mock-line"><span class="mock-dot mock-dot-green"></span><span class="mock-text">Same property, last 3 NYC trips</span></div>
+            <div class="mock-line"><span class="mock-dot mock-dot-red"></span><span class="mock-text">Saves $42/night vs. best public rate</span></div>
+            <div class="mock-line"><span class="mock-dot mock-dot-green"></span><span class="mock-text">Free cancel 48hr &middot; Company negotiated</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-block">
+      <span class="section-label">The checkout collapse</span>
+      <div class="section-title">Nothing left to fill in</div>
+      <p class="section-sub">If the platform knows the traveler's loyalty numbers, payment method, seat preferences, room preferences, and approval chain &mdash; there is nothing left to fill in. The traveler confirms. One screen. Done.</p>
+      <div class="grid-3">
+        <div class="card"><span class="card-label">Hotel</span><h3>Room type, loyalty, payment pre-applied</h3><p>King bed, high floor, Marriott Platinum number attached, corporate card on file. Late check-in flagged from flight arrival time.</p></div>
+        <div class="card"><span class="card-label">Air</span><h3>Seat, ancillaries, fare class resolved</h3><p>Preferred airline, aisle seat, wifi and extra legroom pre-selected from history. TSA PreCheck and Known Traveler Number applied.</p></div>
+        <div class="card"><span class="card-label">Ground</span><h3>Mode, timing, billing automatic</h3><p>Black car for client mornings, ride-hail for internal. Pickup time synced to flight arrival. Billed to cost center.</p></div>
+      </div>
+    </div>
+
+    <div class="card card-dark">
+      <span class="card-label">The structural argument</span>
+      <h2>Accumulated intent is the moat</h2>
+      <p>If AI becomes the primary interface for corporate travel, the advantage goes to whoever has built the deepest understanding of prior intent across all three layers. The question is no longer who has the most hotel listings. It is who already knows what this specific traveler, at this specific company, managed by this specific TMC, needs for this specific trip &mdash; before they even open the app. The platforms that design around confirmation rather than discovery will hold structural leverage that no incumbent can replicate.</p>
+      <div class="chips" style="margin-top:18px"><span class="chip chip-red">Design for the future</span><span class="chip chip-red">Not optimizing for today</span><span class="chip chip-teal">Traveler graph &middot; Q2-Q3</span><span class="chip chip-blue">Confirmation over discovery</span><span class="chip chip-amber">Accumulated intent as moat</span></div>
+    </div>
+  </div>
+
+  <!-- ══ PRINCIPLES ══ -->
+  <div class="panel" id="panel-principles">
+    <div class="header">
+      <span class="eyebrow">Design Principles</span>
+      <h1>How we design at Spotnana</h1>
+      <p class="lead">These principles guide every interface decision we make — from the smallest interaction to full product strategy. They are how we hold ourselves accountable to the people who use what we build.</p>
+    </div>
+
+    <div class="sprint-grid" style="grid-template-columns: repeat(2, 1fr);">
+      <div class="card">
+        <span class="card-label">01</span>
+        <h2>Clarity over cleverness</h2>
+        <p>Travel is stressful. Our interfaces should reduce cognitive load, not add to it. Every element must earn its place. If a user has to think about the UI, we've failed.</p>
+        <div class="chips" style="margin-top:18px"><span class="chip chip-teal">Plain language</span><span class="chip chip-teal">Visible labels</span><span class="chip chip-teal">Predictable patterns</span></div>
+      </div>
+
+      <div class="card">
+        <span class="card-label">02</span>
+        <h2>AI assists, humans decide</h2>
+        <p>Intelligence should surface the right option at the right time — but never take away the user's agency. AI recommendations are suggestions, not mandates.</p>
+        <div class="chips" style="margin-top:18px"><span class="chip chip-red">Show reasoning</span><span class="chip chip-red">Easy override</span><span class="chip chip-teal">Never auto-book</span></div>
+      </div>
+
+      <div class="card">
+        <span class="card-label">03</span>
+        <h2>Design for the 80%, accommodate the 20%</h2>
+        <p>Most travelers need a fast, simple path. Power users and admins need depth. Layer complexity progressively — the default experience should be effortless, with advanced controls always accessible.</p>
+        <div class="chips" style="margin-top:18px"><span class="chip chip-blue">Smart defaults</span><span class="chip chip-blue">Progressive disclosure</span></div>
+      </div>
+
+      <div class="card">
+        <span class="card-label">04</span>
+        <h2>One experience, many contexts</h2>
+        <p>A traveler, an agent, a TMC admin, and a company policy manager all use Spotnana — often for the same trip. Our design must feel consistent across every persona while adapting to each one's needs.</p>
+        <div class="chips" style="margin-top:18px"><span class="chip chip-blue">Shared components</span><span class="chip chip-blue">Persona-specific density</span></div>
+      </div>
+
+      <div class="card">
+        <span class="card-label">05</span>
+        <h2>Speed is a feature</h2>
+        <p>Every second matters when someone is rebooking a cancelled flight at the airport. Our interfaces must be fast to load, fast to understand, and fast to act on.</p>
+        <div class="chips" style="margin-top:18px"><span class="chip chip-teal">Time-to-action</span><span class="chip chip-teal">Prefetch next steps</span><span class="chip chip-teal">Minimize clicks</span></div>
+      </div>
+
+      <div class="card">
+        <span class="card-label">06</span>
+        <h2>Trust through transparency</h2>
+        <p>Corporate travel involves money, policy, and compliance. Users must understand why something is allowed, restricted, or recommended. Never leave them guessing.</p>
+        <div class="chips" style="margin-top:18px"><span class="chip chip-red">Inline policy status</span><span class="chip chip-red">Fare breakdowns</span><span class="chip chip-teal">Early approval signals</span></div>
+      </div>
+
+      <div class="card">
+        <span class="card-label">07</span>
+        <h2>Meet people where they are</h2>
+        <p>Not every interaction requires opening the app. The best travel experience might be a Slack message, an email confirmation, or a voice command. Design for the medium, not just the screen.</p>
+        <div class="chips" style="margin-top:18px"><span class="chip chip-blue">Multi-channel</span><span class="chip chip-blue">Adapt to surface</span></div>
+      </div>
+
+      <div class="card">
+        <span class="card-label">08</span>
+        <h2>Ship, learn, refine</h2>
+        <p>Good design is iterative. We prototype rapidly, test with real users, and improve based on evidence — not assumptions. Shipping fast is not the enemy of shipping well.</p>
+        <div class="chips" style="margin-top:18px"><span class="chip chip-teal">Prototype early</span><span class="chip chip-teal">Real data</span><span class="chip chip-red">Measure outcomes</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ TRAVELER ══ -->
+  <div class="panel" id="panel-traveler">
+    <div class="header">
+      <span class="eyebrow">Traveler perspective</span>
+      <h1>The AI-native business trip</h1>
+      <p class="lead">A design vision for the traveler surface: fewer search steps, better defaults, and clearer moments of confirmation. The desired outcome is not “magic.” It is a trip flow that feels legible, low-effort, and easy to correct.</p>
+    </div>
+
+    <div class="card"><span class="card-label">Phase 01: Intent detected</span><h2>The AI knows before you ask</h2><p>A meeting invite lands for a client in Chicago next Thursday. The AI reads your calendar, cross-references your company travel policy, checks your loyalty status, scans weather and disruption patterns on ORD routes, and surfaces a proposed itinerary before you've thought to open a booking tool.</p><div class="bubble"><span class="bubble-label">Agent message</span><p>"You have an 8am client meeting Thursday at Willis Tower. I've drafted an itinerary: UA 492 departing 6:05am (aisle, economy plus, within policy), Hyatt Regency on the Riverwalk (preferred vendor, $189, $11 under cap). Confirm to book both."</p></div><div class="chips"><span class="chip chip-red">Calendar awareness</span><span class="chip chip-red">Policy enforcement</span><span class="chip chip-red">Proactive draft</span></div></div>
+
+    <div class="grid-2">
+      <div class="card"><span class="card-label">Phase 02: Booking</span><h2>One confirmation, everything booked</h2><p>A single "looks good" books the flight, hotel, and pre-positions a ride-hail. Loyalty numbers, TSA PreCheck, seat preferences, dietary restrictions, all applied automatically.</p><div class="chips"><span class="chip chip-teal">Air</span><span class="chip chip-teal">Hotel</span><span class="chip chip-teal">Ground</span><span class="chip chip-teal">Rail</span></div></div>
+      <div class="card"><span class="card-label">Phase 02b: Alternatives</span><h2>Smart tradeoffs surfaced</h2><p>If the preferred flight is 30% over policy, the AI doesn't just block it. It shows you why, offers two alternatives with tradeoffs spelled out, and flags if an earlier booking window would have saved $180.</p><div class="chips"><span class="chip chip-amber">Price comparison</span><span class="chip chip-amber">Policy logic</span></div></div>
+    </div>
+
+    <div class="card"><span class="card-label">Phase 03: Day of travel</span><h2>The AI travels with you</h2><p>Real-time disruption monitoring runs continuously. Gate change? You're notified before the airline app updates. Flight delayed 40 minutes? The AI automatically pushes your hotel check-in window, texts the client to adjust arrival time, and holds a later ride-hail pickup.</p><div class="bubble"><span class="bubble-label">Agent message, 5:42am</span><p>"UA 492 delayed 35min, new dep 6:40am. Your 8am meeting has ~10min buffer. I've messaged Sarah Chen: 'Running a few minutes late, see you at 8:10.' Ride pickup updated to 5:50am. Still want to proceed?"</p></div><div class="chips"><span class="chip chip-red">Disruption response</span><span class="chip chip-red">Auto-rebook logic</span><span class="chip chip-red">Multi-party comms</span><span class="chip chip-red">Live ground options</span></div></div>
+
+    <div class="grid-2">
+      <div class="card"><span class="card-label">Phase 04: Ground transport</span><h2>Seamless last mile</h2><p>Black car for client-facing mornings, ride-hail for internal hops, rental only if multiple site visits are needed. All billed to the right cost center automatically. No receipt chasing.</p><div class="chips"><span class="chip chip-blue">Black car</span><span class="chip chip-blue">Ride-hail</span><span class="chip chip-blue">Rental</span><span class="chip chip-blue">Rail</span></div></div>
+      <div class="card"><span class="card-label">Phase 05: Post-trip</span><h2>Expenses file themselves</h2><p>Every transaction (flight, ride, hotel, client dinner) is captured, categorized, mapped to the right project code, and submitted before you land. Manual expense reports: obsolete.</p><div class="chips"><span class="chip chip-ink">Auto-categorization</span><span class="chip chip-ink">Receipt capture</span><span class="chip chip-ink">ERP submission</span></div></div>
+    </div>
+
+    <div class="card card-dark">
+      <span class="card-label">Desired outcome</span>
+      <h2>One coherent trip surface</h2>
+      <p>Today the traveler stitches together fragmented tools. A stronger design outcome is a single surface that carries trip context across booking, disruption, ground transport, and expense. We can build parts of this now with shared state, proactive summaries, and better exception design. Future work is making that orchestration feel natural across voice, messaging, and screen UI.</p>
+      <div class="chips" style="margin-top:18px"><span class="chip chip-red">Persistent traveler context</span><span class="chip chip-red">Cross-vendor orchestration</span><span class="chip chip-teal">Policy as guardrails, not gates</span><span class="chip chip-blue">Zero-UI for routine trips</span></div>
+    </div>
+  </div>
+
+  <!-- ══ AGENT ══ -->
+  <div class="panel" id="panel-agent">
+    <div class="header">
+      <span class="eyebrow">Agent perspective</span>
+      <h1>Designing for agent judgment</h1>
+      <p class="lead">This section should be read as an interface problem, not a workforce prediction. If routine tasks are automated, the agent surface should optimize for triage, context handoff, and high-confidence intervention.</p>
+    </div>
+
+    <div class="section-block">
+      <span class="section-label">What the work looks like</span>
+      <div class="section-title">Move agents out of booking forms</div>
+      <p class="section-sub">The most useful near-term design outcome is simple: reduce repetitive form work and concentrate attention on decisions that need judgment. That means queues, summaries, recommended actions, and fast intervention patterns.</p>
+      <div class="grid-3">
+        <div class="card"><span class="card-label">Before AI</span><h3>High-volume, low-judgment work</h3><p>Responding to booking requests, searching inventory, applying policy, sending confirmation emails, chasing receipts. Repetitive and not why agents got into the business.</p><div class="chips"><span class="chip chip-ink">Search &amp; book</span><span class="chip chip-ink">Policy lookup</span><span class="chip chip-ink">Confirmation emails</span></div></div>
+        <div class="card"><span class="card-label">After AI</span><h3>Exception handling and escalation</h3><p>The AI handles the routine. Agents receive a curated queue of situations that genuinely need human judgment: a stranded traveler, a VIP reroute, a policy exception that needs a conversation.</p><div class="chips"><span class="chip chip-red">Exception queue</span><span class="chip chip-red">VIP management</span><span class="chip chip-red">Reroute orchestration</span></div></div>
+        <div class="card"><span class="card-label">Design opportunity</span><h3>Recommendation and intervention tools</h3><p>We can design agent tools that surface patterns, draft responses, and package context for better human decisions. The desired outcome is faster resolution with less hunting, not a vague promise of “advisory.”</p><div class="chips"><span class="chip chip-teal">Decision support</span><span class="chip chip-teal">Pattern detection</span></div></div>
+      </div>
+    </div>
+
+    <div class="section-block">
+      <span class="section-label">UX implications</span>
+      <div class="section-title">Designing the agent console</div>
+      <p class="section-sub">The agent's primary interface is no longer a booking tool. It's a command center for monitoring AI activity, triaging exceptions, and acting on situations that need a human.</p>
+      <div class="card"><span class="card-label">Interface shift 01</span><h2>The exception queue</h2><p>Agents start their day with an AI-prioritized exception queue. Each item shows the situation, what the AI already tried, why it escalated, and the recommended human action. Good UX means agents can assess and act in seconds, not minutes.</p><div class="bubble"><span class="bubble-label">Exception summary</span><p>"Traveler J. Park, BOS to LHR, tomorrow 7am. Original UA 56 cancelled. No compliant alternatives within policy found. Client has board meeting 9am London Wednesday. Awaiting agent guidance on policy exception or alternative routing."</p></div><div class="chips"><span class="chip chip-red">Priority triage</span><span class="chip chip-red">AI context handoff</span><span class="chip chip-amber">Policy exception flow</span></div></div>
+      <div class="grid-2">
+        <div class="card"><span class="card-label">Interface shift 02</span><h3>Live traveler monitoring</h3><p>Agents see a live view of every traveler currently in transit, flagged by risk level: a delayed connection, a traveler in a disrupted city, a missed hotel check-in. The map is ambient; intervention is one click.</p><div class="chips"><span class="chip chip-blue">Real-time tracking</span><span class="chip chip-blue">Risk scoring</span><span class="chip chip-blue">Duty of care</span></div></div>
+        <div class="card"><span class="card-label">Interface shift 03</span><h3>Natural language override</h3><p>When an agent needs to act, they don't navigate booking forms. They instruct the AI in plain language: "Rebook on BA, business class, policy exception approved, notify traveler and update the hotel." The AI executes, the agent confirms.</p><div class="chips"><span class="chip chip-teal">NL commands</span><span class="chip chip-teal">One-click confirm</span><span class="chip chip-teal">Audit trail</span></div></div>
+      </div>
+    </div>
+
+    <div class="card card-dark"><span class="card-label">Desired outcome</span><h2>Judgment in context</h2><p>The agent UI should help a person understand the situation quickly, trust the system's prior work, and act without reassembling the case from scratch. That is something we can design today with better summaries, action scaffolds, and audit visibility.</p><div class="chips" style="margin-top:18px"><span class="chip chip-red">Human judgment at edge cases</span><span class="chip chip-teal">Context packaging</span><span class="chip chip-blue">Visible system history</span><span class="chip chip-amber">Fast intervention</span></div></div>
+  </div>
+
+  <!-- ══ TMC ══ -->
+  <div class="panel" id="panel-tmc">
+    <div class="header">
+      <span class="eyebrow">TMC perspective</span>
+      <h1>Designing the program layer</h1>
+      <p class="lead">The TMC opportunity here is product design: better dashboards, better policy tools, and better crisis surfaces. The desired outcome is a control plane for a travel program, not just a better booking interface.</p>
+    </div>
+
+    <div class="section-block">
+      <span class="section-label">What to design now</span>
+      <div class="section-title">Program visibility and control</div>
+      <p class="section-sub">The practical opportunity is to design tools clients would use every week: program health dashboards, policy simulators, disruption command centers, and recommendation systems tied to clear actions.</p>
+      <div class="grid-2">
+        <div class="card"><span class="card-label">Available now</span><h3>Operational control surfaces</h3><p>Booking, changes, approvals, and reporting can already be redesigned as faster system views with automation wrapped in clearer monitoring and exception controls.</p><div class="chips"><span class="chip chip-ink">Booking oversight</span><span class="chip chip-ink">Change management</span><span class="chip chip-ink">Operational reporting</span></div></div>
+        <div class="card"><span class="card-label">Next to invent</span><h3>Program intelligence tools</h3><p>The future-facing opportunity is richer decision support: policy tuning, supplier recommendations, scenario modeling, and duty-of-care interfaces that help teams act on system insight instead of just reading reports.</p><div class="chips"><span class="chip chip-red">Program management</span><span class="chip chip-red">Scenario modeling</span><span class="chip chip-red">Duty of care</span></div></div>
+      </div>
+    </div>
+
+    <div class="section-block">
+      <span class="section-label">UX implications for TMCs</span>
+      <div class="section-title">The client dashboard reinvented</div>
+      <p class="section-sub">The TMC's primary product shifts from booking tools to insight platforms. The interface that matters most helps corporate travel managers understand what's happening across their entire program in real time.</p>
+      <div class="card"><span class="card-label">Product surface 01</span><h2>The program intelligence dashboard</h2><p>Real-time spend visibility across every supplier, route, and traveler segment. AI-generated recommendations: "Your BOS to SFO routes are 22% above market. Renegotiate United preferred pricing or open American." The TMC's value is surfacing the insight; the client's value is acting on it.</p><div class="chips"><span class="chip chip-blue">Spend analytics</span><span class="chip chip-blue">Supplier benchmarking</span><span class="chip chip-blue">AI recommendations</span></div></div>
+      <div class="grid-2">
+        <div class="card"><span class="card-label">Product surface 02</span><h3>Duty of care command center</h3><p>When a crisis hits, the TMC needs to locate every affected traveler instantly and coordinate response. This is a specialized, high-stakes interface that most TMCs have underinvested in. AI makes it possible at scale.</p><div class="chips"><span class="chip chip-amber">Traveler location</span><span class="chip chip-amber">Crisis response</span></div></div>
+        <div class="card"><span class="card-label">Product surface 03</span><h3>Policy design tools</h3><p>TMCs can offer tools that help clients model the spend impact of policy changes before implementing them: "If you raise the hotel cap by $30 in NYC, here's the compliance rate and cost change."</p><div class="chips"><span class="chip chip-teal">Policy simulation</span><span class="chip chip-teal">Compliance modeling</span></div></div>
+      </div>
+    </div>
+
+    <div class="card card-dark"><span class="card-label">Desired outcome</span><h2>A better control plane for travel programs</h2><p>The design goal is a product layer that helps organizations understand risk, tune policy, and coordinate response. Some of that is achievable now with stronger dashboards and simulations. Some of it will require inventing new interfaces for system-level oversight.</p><div class="chips" style="margin-top:18px"><span class="chip chip-red">Program visibility</span><span class="chip chip-teal">Organizational memory</span><span class="chip chip-blue">Human accountability</span><span class="chip chip-amber">System-level oversight</span></div></div>
+  </div>
+
+  <!-- ══ ADMIN ══ -->
+  <div class="panel" id="panel-admin">
+    <div class="header">
+      <span class="eyebrow">Admin &amp; EA perspective</span>
+      <h1>Policy that enforces itself</h1>
+      <p class="lead">This is really a design problem about policy, preference, and oversight. The opportunity is to reduce manual coordination and replace it with interfaces that make rules, exceptions, and traveler wellbeing easier to see and manage.</p>
+    </div>
+
+    <div class="section-block">
+      <span class="section-label">The EA role reimagined</span>
+      <div class="section-title">From manual coordination to preference systems</div>
+      <p class="section-sub">The design opportunity is not to glorify strategy work. It is to capture preferences, approvals, and edge cases in ways that make future trips easier to review, adjust, and trust.</p>
+      <div class="grid-3">
+        <div class="card"><span class="card-label">Work that disappears</span><h3>Booking and logistics</h3><p>Searching flights, comparing hotel options, managing approval chains, processing expense reports, sending itineraries. This is the work that consumes most of an EA's travel-related time today. The AI does all of it.</p><div class="chips"><span class="chip chip-ink">Search &amp; book</span><span class="chip chip-ink">Approvals</span><span class="chip chip-ink">Expense processing</span></div></div>
+        <div class="card"><span class="card-label">Work that remains</span><h3>Judgment and preferences</h3><p>Knowing the executive prefers an aisle seat on the left side of a 737. Knowing they never take the 6am flight before a board meeting. This institutional knowledge feeds the AI, but the EA is the one who holds and curates it.</p><div class="chips"><span class="chip chip-amber">Preference curation</span><span class="chip chip-amber">Context management</span><span class="chip chip-amber">AI supervision</span></div></div>
+        <div class="card"><span class="card-label">Work that grows</span><h3>Complex coordination</h3><p>Multi-leg international trips with visas. Team offsites requiring 30 travelers in sync. A last-minute reschedule cascading across 3 time zones and 5 stakeholders. Complex situations that require judgment, persuasion, and accountability.</p><div class="chips"><span class="chip chip-red">Complex trips</span><span class="chip chip-red">Group coordination</span><span class="chip chip-red">Crisis management</span></div></div>
+      </div>
+    </div>
+
+    <div class="section-block">
+      <span class="section-label">The travel manager role</span>
+      <div class="section-title">From approval bottlenecks to policy tooling</div>
+      <p class="section-sub">A strong outcome for travel managers is fewer one-off approvals and better interfaces for shaping policy behavior. The more clearly the system explains exceptions and outcomes, the less manual review it should require.</p>
+      <div class="card"><span class="card-label">Interface shift 01</span><h2>The policy console</h2><p>Travel policy moves from a static document to a living ruleset. The travel manager's primary interface is a policy configuration tool that lets them define rules in plain language, simulate the spend and compliance impact of changes before publishing, and see in real time where exceptions are occurring and why.</p><div class="bubble"><span class="bubble-label">Policy insight</span><p>"Your $189 NYC hotel cap generated 47 policy exceptions last month, 31 of which were approved. Average exception spend was $218. Raising the cap to $215 would bring 28 of those exceptions into compliance and save 3.2 hours of approval processing time."</p></div><div class="chips"><span class="chip chip-blue">Policy simulation</span><span class="chip chip-blue">Exception analytics</span><span class="chip chip-blue">Approval automation</span></div></div>
+      <div class="grid-2">
+        <div class="card"><span class="card-label">Interface shift 02</span><h3>Spend forecasting</h3><p>AI can predict travel spend 90 days out based on calendar density, booked trips, and historical patterns. Travel managers can manage budget proactively rather than reporting on actuals after it's spent.</p><div class="chips"><span class="chip chip-teal">Predictive spend</span><span class="chip chip-teal">Budget management</span></div></div>
+        <div class="card"><span class="card-label">Interface shift 03</span><h3>Traveler wellbeing signals</h3><p>How many trips per month is the sales team averaging? Who's been on back-to-back weeks of travel for two months straight? Data that was always available but never surfaced, now presented as an actionable wellbeing dashboard.</p><div class="chips"><span class="chip chip-amber">Travel intensity</span><span class="chip chip-amber">Burnout signals</span></div></div>
+      </div>
+    </div>
+
+    <div class="card card-dark"><span class="card-label">Desired outcome</span><h2>Replace approval chains with better policy UX</h2><p>Approval chains are often a workaround for weak policy interfaces. A stronger future state is explicit rules, visible reasoning, targeted escalation, and auditability built into the product. Much of that can be designed today. The harder invention work is making those controls feel understandable instead of bureaucratic.</p><div class="chips" style="margin-top:18px"><span class="chip chip-red">Policy as code</span><span class="chip chip-teal">Transparent AI reasoning</span><span class="chip chip-blue">Audit and accountability</span><span class="chip chip-amber">Configurable autonomy levels</span></div></div>
+  </div>
+
+  <!-- ══ ROADMAP ══ -->
+  <div class="panel" id="panel-roadmap">
+    <div class="header">
+      <span class="eyebrow">Execution plan</span>
+      <h1>Traveler AI Roadmap</h1>
+      <p class="lead">A four-quarter UI/UX roadmap for a traveler AI experience. Each sprint is framed around interfaces we can ship, outcomes we can measure, and product surfaces we should explicitly defer until the foundation is strong.</p>
+    </div>
+
+    <div class="roadmap-quarter">
+      <div class="roadmap-kicker">
+        <div>
+          <span class="section-label">Quarter 01</span>
+          <div class="section-title">Trip proposal MVP</div>
+        </div>
+        <div class="roadmap-chipline">
+          <span class="chip chip-red">Proposal flow</span>
+          <span class="chip chip-blue">Traveler trust</span>
+          <span class="chip chip-teal">Booking confirmation</span>
+        </div>
+      </div>
+      <p class="section-sub">Desired outcome: a traveler can move from intent to confident booking in under two minutes, with enough transparency and control to trust the recommendation.</p>
+      <div class="sprint-grid">
+        <div class="sprint-card"><div class="sprint-meta"><span class="sprint-tag">Sprint 01</span><span class="sprint-window">Weeks 1-2</span></div><h3>Intent Capture</h3><p class="sprint-summary">Define the front door for the traveler AI experience so requests feel structured even when they start conversationally.</p><div class="viz-list"><div class="viz-item"><span class="viz-label">MVP Scope</span><p>Traveler prompt entry, intent parser states, request summary card, and empty/loading/error states.</p></div><div class="viz-item"><span class="viz-label">Success Metrics</span><p>80% of test users can start a trip request without facilitator help and understand what the system captured.</p></div><div class="viz-item"><span class="viz-label">User Stories</span><p>As a traveler, I want to state my trip in plain language and verify the system understood destination, timing, and purpose.</p></div><div class="viz-item"><span class="viz-label">Prioritized Screens</span><p>Intent entry, parsed request review, loading state, request error recovery.</p></div><div class="viz-item"><span class="viz-label">Leave for Phase 2</span><p>Voice capture, multi-turn planning, and calendar editing inside the flow.</p></div></div></div>
+        <div class="sprint-card"><div class="sprint-meta"><span class="sprint-tag">Sprint 02</span><span class="sprint-window">Weeks 3-4</span></div><h3>Proposal Surface</h3><p class="sprint-summary">Turn the AI output into a recommendation UI that feels understandable instead of magical.</p><div class="viz-list"><div class="viz-item"><span class="viz-label">MVP Scope</span><p>Primary itinerary card, hotel recommendation card, pricing summary, policy status, and confidence cues.</p></div><div class="viz-item"><span class="viz-label">Success Metrics</span><p>Users can correctly explain why the top option is recommended in usability review.</p></div><div class="viz-item"><span class="viz-label">User Stories</span><p>As a traveler, I want one clearly recommended option so I do not need to compare ten variants manually.</p></div><div class="viz-item"><span class="viz-label">Prioritized Screens</span><p>Proposal overview, recommendation details, alternative slot, confidence and policy badges.</p></div><div class="viz-item"><span class="viz-label">Leave for Phase 2</span><p>Supplier bundling logic, loyalty optimization, and group trip recommendations.</p></div></div></div>
+        <div class="sprint-card"><div class="sprint-meta"><span class="sprint-tag">Sprint 03</span><span class="sprint-window">Weeks 5-6</span></div><h3>Explainability Layer</h3><p class="sprint-summary">Add enough reasoning to build trust without turning the interface into a wall of system text.</p><div class="viz-list"><div class="viz-item"><span class="viz-label">MVP Scope</span><p>Why this trip panel, matched preferences, policy rules applied, and rejected alternative summaries.</p></div><div class="viz-item"><span class="viz-label">Success Metrics</span><p>Trust score improves in concept testing and override rates drop for policy-compliant proposals.</p></div><div class="viz-item"><span class="viz-label">User Stories</span><p>As a traveler, I want to know why this option was chosen so I can approve quickly.</p></div><div class="viz-item"><span class="viz-label">Prioritized Screens</span><p>Reasoning drawer, policy explanation, preference match details, alternative rationale.</p></div><div class="viz-item"><span class="viz-label">Leave for Phase 2</span><p>Full audit history, model confidence diagnostics, and admin-facing reasoning configuration.</p></div></div></div>
+        <div class="sprint-card"><div class="sprint-meta"><span class="sprint-tag">Sprint 04</span><span class="sprint-window">Weeks 7-8</span></div><h3>Fast Confirmation</h3><p class="sprint-summary">Design the minimal decision flow that lets the traveler accept or adjust the proposal without falling back to old booking funnels.</p><div class="viz-list"><div class="viz-item"><span class="viz-label">MVP Scope</span><p>Approve, edit one constraint, compare two alternatives, and confirm booking with a clear status path.</p></div><div class="viz-item"><span class="viz-label">Success Metrics</span><p>Median concept completion time under two minutes for a routine domestic trip.</p></div><div class="viz-item"><span class="viz-label">User Stories</span><p>As a traveler, I want to make one small change, like seat or timing, without restarting my search.</p></div><div class="viz-item"><span class="viz-label">Prioritized Screens</span><p>Confirmation CTA state, edit constraint modal, compare options view, success state.</p></div><div class="viz-item"><span class="viz-label">Leave for Phase 2</span><p>Full itinerary builder, fare rule edge cases, and multi-city editing.</p></div></div></div>
+        <div class="sprint-card"><div class="sprint-meta"><span class="sprint-tag">Sprint 05</span><span class="sprint-window">Weeks 9-10</span></div><h3>Preference Controls</h3><p class="sprint-summary">Ship lightweight controls that make the system feel controllable and personal.</p><div class="viz-list"><div class="viz-item"><span class="viz-label">MVP Scope</span><p>Seat preference, airline bias, hotel tier preference, autonomy setting, and approval behavior setting.</p></div><div class="viz-item"><span class="viz-label">Success Metrics</span><p>Users can locate and change autonomy or preference settings in under 30 seconds.</p></div><div class="viz-item"><span class="viz-label">User Stories</span><p>As a traveler, I want the system to know my usual preferences and still let me override them easily.</p></div><div class="viz-item"><span class="viz-label">Prioritized Screens</span><p>Preference center, autonomy control, booking rule summary, inline override states.</p></div><div class="viz-item"><span class="viz-label">Leave for Phase 2</span><p>Deep profile editing, loyalty account management, and preference learning visualizations.</p></div></div></div>
+        <div class="sprint-card"><div class="sprint-meta"><span class="sprint-tag">Sprint 06</span><span class="sprint-window">Weeks 11-12</span></div><h3>MVP Hardening</h3><p class="sprint-summary">Package the experience into a coherent release candidate with states, guidance, and instrumentation.</p><div class="viz-list"><div class="viz-item"><span class="viz-label">MVP Scope</span><p>Cross-flow polish, empty states, fallback copy, event instrumentation, and accessibility fixes.</p></div><div class="viz-item"><span class="viz-label">Success Metrics</span><p>Usability score target met, accessibility review closed, and traveler proposal funnel fully instrumented.</p></div><div class="viz-item"><span class="viz-label">User Stories</span><p>As a traveler, I want the experience to feel complete and predictable even when the system cannot help.</p></div><div class="viz-item"><span class="viz-label">Prioritized Screens</span><p>All core states, failure states, help states, and release-ready UI review screens.</p></div><div class="viz-item"><span class="viz-label">Leave for Phase 2</span><p>Agent escalation UI, disruption AI, and cross-device continuity.</p></div></div></div>
+      </div>
+    </div>
+
+    <div class="roadmap-quarter">
+      <div class="roadmap-kicker">
+        <div>
+          <span class="section-label">Quarter 02</span>
+          <div class="section-title">Disruption and recovery</div>
+        </div>
+        <div class="roadmap-chipline">
+          <span class="chip chip-red">Disruption UI</span>
+          <span class="chip chip-blue">Calm status</span>
+          <span class="chip chip-amber">Recovery decisions</span>
+        </div>
+      </div>
+      <p class="section-sub">Desired outcome: when a trip changes, the traveler sees one clear recommendation, one clear explanation, and one clear next action.</p>
+      <div class="sprint-grid">
+        <div class="sprint-card"><div class="sprint-meta"><span class="sprint-tag">Sprint 07</span><span class="sprint-window">Weeks 1-2</span></div><h3>Trip Status Layer</h3><p class="sprint-summary">Introduce a persistent trip status surface that can hold itinerary state, confidence, and alerts.</p><div class="viz-list"><div class="viz-item"><span class="viz-label">MVP Scope</span><p>Trip timeline, status banner, disruption markers, and current recommendation summary.</p></div><div class="viz-item"><span class="viz-label">Success Metrics</span><p>Users can identify what changed and how urgent it is without opening multiple screens.</p></div><div class="viz-item"><span class="viz-label">User Stories</span><p>As a traveler, I want one place to check the state of my trip before and during travel.</p></div><div class="viz-item"><span class="viz-label">Prioritized Screens</span><p>Trip home, live status state, low-risk alert, high-risk alert.</p></div><div class="viz-item"><span class="viz-label">Leave for Phase 2</span><p>Map-heavy views, airport wayfinding, and wearable experiences.</p></div></div></div>
+        <div class="sprint-card"><div class="sprint-meta"><span class="sprint-tag">Sprint 08</span><span class="sprint-window">Weeks 3-4</span></div><h3>Delay Recommendation UI</h3><p class="sprint-summary">Design the first disruption recommendation flow around delays and missed connection risk.</p><div class="viz-list"><div class="viz-item"><span class="viz-label">MVP Scope</span><p>What changed, recommended action, timing impact, and approve/decline controls.</p></div><div class="viz-item"><span class="viz-label">Success Metrics</span><p>Users can explain the recommended recovery path and expected outcome in testing.</p></div><div class="viz-item"><span class="viz-label">User Stories</span><p>As a traveler, I want the system to tell me what it suggests I do when my trip is disrupted.</p></div><div class="viz-item"><span class="viz-label">Prioritized Screens</span><p>Delay alert, recovery proposal, decision state, post-decision confirmation.</p></div><div class="viz-item"><span class="viz-label">Leave for Phase 2</span><p>Automatic rebooking, hotel reaccommodation, and full vendor execution.</p></div></div></div>
+        <div class="sprint-card"><div class="sprint-meta"><span class="sprint-tag">Sprint 09</span><span class="sprint-window">Weeks 5-6</span></div><h3>Notification Design</h3><p class="sprint-summary">Create a calm interruption system so important changes are visible without becoming noisy.</p><div class="viz-list"><div class="viz-item"><span class="viz-label">MVP Scope</span><p>Priority model, push copy hierarchy, passive status patterns, and alert grouping rules.</p></div><div class="viz-item"><span class="viz-label">Success Metrics</span><p>Alert comprehension improves while perceived notification overload stays low in testing.</p></div><div class="viz-item"><span class="viz-label">User Stories</span><p>As a traveler, I want to know when I need to act and when the system is simply monitoring.</p></div><div class="viz-item"><span class="viz-label">Prioritized Screens</span><p>Push notification states, alert center, passive monitoring indicator, dismissed state.</p></div><div class="viz-item"><span class="viz-label">Leave for Phase 2</span><p>Omnichannel notification orchestration and smart wearable escalation.</p></div></div></div>
+        <div class="sprint-card"><div class="sprint-meta"><span class="sprint-tag">Sprint 10</span><span class="sprint-window">Weeks 7-8</span></div><h3>Human Escalation</h3><p class="sprint-summary">Design the handoff to an agent or support channel so confidence does not collapse when automation stops.</p><div class="viz-list"><div class="viz-item"><span class="viz-label">MVP Scope</span><p>Escalation trigger UI, context summary, handoff state, and traveler reassurance copy.</p></div><div class="viz-item"><span class="viz-label">Success Metrics</span><p>Users understand what has already been tried before a human joins the flow.</p></div><div class="viz-item"><span class="viz-label">User Stories</span><p>As a traveler, I want help to arrive with context so I do not have to repeat everything.</p></div><div class="viz-item"><span class="viz-label">Prioritized Screens</span><p>Escalation prompt, handoff summary, waiting state, live human takeover state.</p></div><div class="viz-item"><span class="viz-label">Leave for Phase 2</span><p>Rich agent co-browsing, voice handoff, and shared planning sessions.</p></div></div></div>
+        <div class="sprint-card"><div class="sprint-meta"><span class="sprint-tag">Sprint 11</span><span class="sprint-window">Weeks 9-10</span></div><h3>Ground and Arrival</h3><p class="sprint-summary">Extend disruption UX into the last mile so trip recovery is not just about the flight.</p><div class="viz-list"><div class="viz-item"><span class="viz-label">MVP Scope</span><p>Ground transport status, revised arrival summary, and simple hotel or meeting impact messaging.</p></div><div class="viz-item"><span class="viz-label">Success Metrics</span><p>Users feel the product handles the “whole trip” rather than only the air segment.</p></div><div class="viz-item"><span class="viz-label">User Stories</span><p>As a traveler, I want to know how a delay affects the rest of my itinerary and not just my flight.</p></div><div class="viz-item"><span class="viz-label">Prioritized Screens</span><p>Arrival summary, ride update state, hotel timing update, meeting impact card.</p></div><div class="viz-item"><span class="viz-label">Leave for Phase 2</span><p>True multimodal orchestration, rail recovery, and local mobility partner integrations.</p></div></div></div>
+        <div class="sprint-card"><div class="sprint-meta"><span class="sprint-tag">Sprint 12</span><span class="sprint-window">Weeks 11-12</span></div><h3>Recovery MVP Release</h3><p class="sprint-summary">Integrate the disruption work into a clean traveler narrative and validate end-to-end comprehension.</p><div class="viz-list"><div class="viz-item"><span class="viz-label">MVP Scope</span><p>Release-ready disruption journey, instrumentation, support copy, and confidence calibration.</p></div><div class="viz-item"><span class="viz-label">Success Metrics</span><p>Reduced decision time during disruption simulations and improved traveler confidence scores.</p></div><div class="viz-item"><span class="viz-label">User Stories</span><p>As a traveler, I want recovery moments to feel directed, not chaotic.</p></div><div class="viz-item"><span class="viz-label">Prioritized Screens</span><p>Full disrupted journey, release help states, high-risk scenario review, post-trip feedback.</p></div><div class="viz-item"><span class="viz-label">Leave for Phase 2</span><p>Autonomous execution loops and predictive disruption interventions before the traveler is affected.</p></div></div></div>
+      </div>
+    </div>
+
+    <div class="roadmap-quarter">
+      <div class="roadmap-kicker">
+        <div>
+          <span class="section-label">Quarter 03</span>
+          <div class="section-title">Cross-surface orchestration</div>
+        </div>
+        <div class="roadmap-chipline">
+          <span class="chip chip-red">Shared state</span>
+          <span class="chip chip-blue">Messaging UI</span>
+          <span class="chip chip-teal">Multi-surface continuity</span>
+        </div>
+      </div>
+      <p class="section-sub">Desired outcome: the traveler experience feels coherent across mobile, desktop, and messaging surfaces, with one trip memory and one source of truth.</p>
+      <div class="sprint-grid">
+        <div class="sprint-card"><div class="sprint-meta"><span class="sprint-tag">Sprint 13</span><span class="sprint-window">Weeks 1-2</span></div><h3>Trip Memory Model</h3><p class="sprint-summary">Translate fragmented UI states into a shared trip object that can power multiple surfaces consistently.</p><div class="viz-list"><div class="viz-item"><span class="viz-label">MVP Scope</span><p>Shared traveler context model, event hierarchy, and surfaced trip memory primitives for design.</p></div><div class="viz-item"><span class="viz-label">Success Metrics</span><p>Design reviews no longer require separate interpretations of trip state across surfaces.</p></div><div class="viz-item"><span class="viz-label">User Stories</span><p>As a traveler, I want the system to remember what it already knows regardless of where I interact.</p></div><div class="viz-item"><span class="viz-label">Prioritized Screens</span><p>State model diagrams, trip memory cards, continuity patterns, context handoff views.</p></div><div class="viz-item"><span class="viz-label">Leave for Phase 2</span><p>Deep admin editing tools for the state model and full trip graph visualization.</p></div></div></div>
+        <div class="sprint-card"><div class="sprint-meta"><span class="sprint-tag">Sprint 14</span><span class="sprint-window">Weeks 3-4</span></div><h3>Messaging Companion</h3><p class="sprint-summary">Explore how the same traveler AI patterns work in a lightweight messaging surface.</p><div class="viz-list"><div class="viz-item"><span class="viz-label">MVP Scope</span><p>Proposal summary in chat, approve/decline actions, and disruption updates in message format.</p></div><div class="viz-item"><span class="viz-label">Success Metrics</span><p>Users can complete a simple approval flow in messaging without needing the main app.</p></div><div class="viz-item"><span class="viz-label">User Stories</span><p>As a traveler, I want to handle lightweight decisions from the channel I am already using.</p></div><div class="viz-item"><span class="viz-label">Prioritized Screens</span><p>Chat summary, quick actions, open-in-app transition, message-based disruption approval.</p></div><div class="viz-item"><span class="viz-label">Leave for Phase 2</span><p>Full conversational travel management entirely inside messaging.</p></div></div></div>
+        <div class="sprint-card"><div class="sprint-meta"><span class="sprint-tag">Sprint 15</span><span class="sprint-window">Weeks 5-6</span></div><h3>Desktop Companion</h3><p class="sprint-summary">Design a larger-screen planning and review experience for travelers who want more context before committing.</p><div class="viz-list"><div class="viz-item"><span class="viz-label">MVP Scope</span><p>Expanded itinerary comparison, calendar context, richer policy explanation, and save-for-later review.</p></div><div class="viz-item"><span class="viz-label">Success Metrics</span><p>Users doing complex travel prefer the desktop surface for review while keeping mobile for action.</p></div><div class="viz-item"><span class="viz-label">User Stories</span><p>As a traveler, I want a richer review interface when my trip has more tradeoffs.</p></div><div class="viz-item"><span class="viz-label">Prioritized Screens</span><p>Desktop proposal view, comparison mode, review notes state, send-to-mobile continuation.</p></div><div class="viz-item"><span class="viz-label">Leave for Phase 2</span><p>Power-user trip assembly and collaboration with assistants or managers.</p></div></div></div>
+        <div class="sprint-card"><div class="sprint-meta"><span class="sprint-tag">Sprint 16</span><span class="sprint-window">Weeks 7-8</span></div><h3>Continuity Patterns</h3><p class="sprint-summary">Build the interaction patterns that make switching surfaces feel intentional instead of broken.</p><div class="viz-list"><div class="viz-item"><span class="viz-label">MVP Scope</span><p>Resume states, handoff tokens, “continue where you left off” modules, and confirmation continuity.</p></div><div class="viz-item"><span class="viz-label">Success Metrics</span><p>Users retain context when moving between message, mobile, and desktop without re-reading everything.</p></div><div class="viz-item"><span class="viz-label">User Stories</span><p>As a traveler, I want to move across surfaces without losing my place or confidence.</p></div><div class="viz-item"><span class="viz-label">Prioritized Screens</span><p>Resume banner, cross-surface success states, continuity prompt, reopened proposal state.</p></div><div class="viz-item"><span class="viz-label">Leave for Phase 2</span><p>Deep multi-device synchronization controls and offline continuity.</p></div></div></div>
+        <div class="sprint-card"><div class="sprint-meta"><span class="sprint-tag">Sprint 17</span><span class="sprint-window">Weeks 9-10</span></div><h3>Companion Voice Concepts</h3><p class="sprint-summary">Prototype voice as a companion modality without making it the primary shipping bet too early.</p><div class="viz-list"><div class="viz-item"><span class="viz-label">MVP Scope</span><p>Voice prompt entry concept, spoken confirmation pattern, and visual handoff back to screen UI.</p></div><div class="viz-item"><span class="viz-label">Success Metrics</span><p>Users understand which parts of the interaction are better handled by voice versus screen.</p></div><div class="viz-item"><span class="viz-label">User Stories</span><p>As a traveler, I want to start or approve simple actions hands-free when appropriate.</p></div><div class="viz-item"><span class="viz-label">Prioritized Screens</span><p>Voice entry concept, listening state, spoken confirmation state, screen follow-up state.</p></div><div class="viz-item"><span class="viz-label">Leave for Phase 2</span><p>Full voice-first trip management and no-screen disruption handling.</p></div></div></div>
+        <div class="sprint-card"><div class="sprint-meta"><span class="sprint-tag">Sprint 18</span><span class="sprint-window">Weeks 11-12</span></div><h3>Orchestration Design System</h3><p class="sprint-summary">Formalize reusable components and states so the traveler AI experience can scale coherently.</p><div class="viz-list"><div class="viz-item"><span class="viz-label">MVP Scope</span><p>Recommendation cards, reasoning modules, continuity states, status banners, and approval actions.</p></div><div class="viz-item"><span class="viz-label">Success Metrics</span><p>New surfaces can be designed faster using shared components instead of bespoke one-off UI.</p></div><div class="viz-item"><span class="viz-label">User Stories</span><p>As a product team, we want the experience to stay coherent as we expand traveler AI into more surfaces.</p></div><div class="viz-item"><span class="viz-label">Prioritized Screens</span><p>Component library, state documentation, orchestration patterns, system-level design review.</p></div><div class="viz-item"><span class="viz-label">Leave for Phase 2</span><p>Full tokenized AI design system governance across all personas.</p></div></div></div>
+      </div>
+    </div>
+
+    <div class="roadmap-quarter">
+      <div class="roadmap-kicker">
+        <div>
+          <span class="section-label">Quarter 04</span>
+          <div class="section-title">Future-facing invention work</div>
+        </div>
+        <div class="roadmap-chipline">
+          <span class="chip chip-red">Predictive UX</span>
+          <span class="chip chip-blue">Autonomy controls</span>
+          <span class="chip chip-amber">Invented patterns</span>
+        </div>
+      </div>
+      <p class="section-sub">Desired outcome: explore the next-generation traveler AI patterns we cannot fully ship yet, but should prototype now so the product has a design point of view beyond basic automation.</p>
+      <div class="sprint-grid">
+        <div class="sprint-card"><div class="sprint-meta"><span class="sprint-tag">Sprint 19</span><span class="sprint-window">Weeks 1-2</span></div><h3>Proactive Drafting</h3><p class="sprint-summary">Prototype interfaces where the system proposes a trip before the traveler explicitly starts a booking flow.</p><div class="viz-list"><div class="viz-item"><span class="viz-label">MVP Scope</span><p>Meeting-triggered proposal concepts, proactive summary cards, and “why now” explanation patterns.</p></div><div class="viz-item"><span class="viz-label">Success Metrics</span><p>Users find proactive suggestions helpful rather than intrusive in research testing.</p></div><div class="viz-item"><span class="viz-label">User Stories</span><p>As a traveler, I want a head start when my calendar clearly implies a trip.</p></div><div class="viz-item"><span class="viz-label">Prioritized Screens</span><p>Proactive prompt, generated trip draft, dismissal state, snooze and trust controls.</p></div><div class="viz-item"><span class="viz-label">Leave for Phase 2</span><p>Production-grade signal confidence and enterprise calendar automation logic.</p></div></div></div>
+        <div class="sprint-card"><div class="sprint-meta"><span class="sprint-tag">Sprint 20</span><span class="sprint-window">Weeks 3-4</span></div><h3>Autonomy Dashboard</h3><p class="sprint-summary">Invent a clearer model for how travelers inspect and tune what the AI is allowed to do on their behalf.</p><div class="viz-list"><div class="viz-item"><span class="viz-label">MVP Scope</span><p>Autonomy levels, action logs, approval thresholds, and reversible system decisions.</p></div><div class="viz-item"><span class="viz-label">Success Metrics</span><p>Users can predict system behavior more accurately after using the autonomy dashboard concept.</p></div><div class="viz-item"><span class="viz-label">User Stories</span><p>As a traveler, I want to know what the system may do automatically before it acts for me.</p></div><div class="viz-item"><span class="viz-label">Prioritized Screens</span><p>Autonomy home, permission model, recent actions log, rollback state.</p></div><div class="viz-item"><span class="viz-label">Leave for Phase 2</span><p>Cross-persona permissioning and policy-driven autonomy inheritance.</p></div></div></div>
+        <div class="sprint-card"><div class="sprint-meta"><span class="sprint-tag">Sprint 21</span><span class="sprint-window">Weeks 5-6</span></div><h3>Companion Presence</h3><p class="sprint-summary">Explore how the AI can feel present and helpful without demanding constant attention.</p><div class="viz-list"><div class="viz-item"><span class="viz-label">MVP Scope</span><p>Ambient status concepts, calm presence indicators, and subtle “watching for issues” patterns.</p></div><div class="viz-item"><span class="viz-label">Success Metrics</span><p>Users report higher confidence without a corresponding rise in perceived interruption.</p></div><div class="viz-item"><span class="viz-label">User Stories</span><p>As a traveler, I want reassurance that the system is monitoring my trip without overwhelming me.</p></div><div class="viz-item"><span class="viz-label">Prioritized Screens</span><p>Ambient status widget, passive monitoring state, escalation thresholds, reassurance moments.</p></div><div class="viz-item"><span class="viz-label">Leave for Phase 2</span><p>Hardware integrations and truly continuous live monitoring experiences.</p></div></div></div>
+        <div class="sprint-card"><div class="sprint-meta"><span class="sprint-tag">Sprint 22</span><span class="sprint-window">Weeks 7-8</span></div><h3>Multi-Traveler Scenarios</h3><p class="sprint-summary">Push the concepts into assistant, family, and team-travel use cases to reveal where the current model breaks.</p><div class="viz-list"><div class="viz-item"><span class="viz-label">MVP Scope</span><p>Shared trip views, delegated approvals, and companion traveler context patterns.</p></div><div class="viz-item"><span class="viz-label">Success Metrics</span><p>Research identifies where solo-traveler patterns fail before scaling to more complex cases.</p></div><div class="viz-item"><span class="viz-label">User Stories</span><p>As a traveler or assistant, I want to understand shared responsibilities and approvals on a trip.</p></div><div class="viz-item"><span class="viz-label">Prioritized Screens</span><p>Shared itinerary, delegated approval state, companion traveler card, role visibility patterns.</p></div><div class="viz-item"><span class="viz-label">Leave for Phase 2</span><p>Production collaboration architecture and real-time shared editing.</p></div></div></div>
+        <div class="sprint-card"><div class="sprint-meta"><span class="sprint-tag">Sprint 23</span><span class="sprint-window">Weeks 9-10</span></div><h3>Anticipatory Recovery</h3><p class="sprint-summary">Prototype the interfaces for acting before disruption fully lands, not just after the traveler is already affected.</p><div class="viz-list"><div class="viz-item"><span class="viz-label">MVP Scope</span><p>Risk forecast cards, preemptive recovery proposals, and confidence-based recommendation timing.</p></div><div class="viz-item"><span class="viz-label">Success Metrics</span><p>Users prefer preemptive options when confidence is high and reasoning is clear.</p></div><div class="viz-item"><span class="viz-label">User Stories</span><p>As a traveler, I want earlier options when my trip is likely to go wrong, not just after it does.</p></div><div class="viz-item"><span class="viz-label">Prioritized Screens</span><p>Risk prediction state, early recommendation UI, confidence explanation, defer decision state.</p></div><div class="viz-item"><span class="viz-label">Leave for Phase 2</span><p>Live predictive systems, operational confidence thresholds, and automatic preemptive execution.</p></div></div></div>
+        <div class="sprint-card"><div class="sprint-meta"><span class="sprint-tag">Sprint 24</span><span class="sprint-window">Weeks 11-12</span></div><h3>North Star Prototype</h3><p class="sprint-summary">Wrap the year into a high-fidelity north-star concept showing where traveler AI can go beyond the MVPs.</p><div class="viz-list"><div class="viz-item"><span class="viz-label">MVP Scope</span><p>Connected north-star prototype across proposal, disruption, messaging, and autonomy control surfaces.</p></div><div class="viz-item"><span class="viz-label">Success Metrics</span><p>Leadership and product teams align on a believable long-term design direction with clear next bets.</p></div><div class="viz-item"><span class="viz-label">User Stories</span><p>As a product organization, we want a concrete future vision that informs what we build next.</p></div><div class="viz-item"><span class="viz-label">Prioritized Screens</span><p>North-star flow, future-state dashboard, autonomy control model, proactive trip orchestration journey.</p></div><div class="viz-item"><span class="viz-label">Leave for Phase 2</span><p>Anything that depends on mature orchestration, deep integrations, or production-grade autonomous action.</p></div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ GALLERY ══ -->
+  <div class="panel" id="panel-gallery">
+    <div class="header">
+      <span class="eyebrow">April 2026 / Week 1</span>
+      <h1>Shipping and Concepts</h1>
+      <p class="lead">A weekly snapshot of shipped work and concept explorations from product design.</p>
+    </div>
+
+    <div class="grid">
+<div class="card" onclick="openLb(0)">
+      <img class="card-img" src="Sharing%20Design/April/Week%201/Admin%20UX%20Phase%201.png" alt="Admin UX Phase 1" loading="lazy">
+      <div class="card-overlay"><div class="card-overlay-icon">&#9654;</div></div>
+      <div class="card-meta"><div class="card-title">Admin UX Phase 1</div><div class="card-desc">Sidenav and TMC/Org Selector</div></div>
+    </div>
+<div class="card" onclick="openLb(1)">
+      <img class="card-img" src="Sharing%20Design/April/Week%201/Admin%20UX%20Phase%202.png" alt="Admin UX Phase 2" loading="lazy">
+      <div class="card-overlay"><div class="card-overlay-icon">&#9654;</div></div>
+      <div class="card-meta"><div class="card-title">Admin UX Phase 2</div><div class="card-desc">Table</div></div>
+    </div>
+<div class="card" onclick="openLb(2)">
+      <img class="card-img" src="Sharing%20Design/April/Week%201/Advanced%20Filters%E2%80%A8%2B%20AI%20Filters.png" alt="Advanced Filters + AI Filters" loading="lazy">
+      <div class="card-overlay"><div class="card-overlay-icon">&#9654;</div></div>
+      <div class="card-meta"><div class="card-title">Advanced Filters + AI Filters</div><div class="card-desc">Consistent filters across the product</div></div>
+    </div>
+<div class="card" onclick="openLb(3)">
+      <img class="card-img" src="Sharing%20Design/April/Week%201/AI%20chat%20experience.png" alt="AI Chat Experience" loading="lazy">
+      <div class="card-overlay"><div class="card-overlay-icon">&#9654;</div></div>
+      <div class="card-meta"><div class="card-title">AI Chat Experience</div><div class="card-desc">Conversational travel search</div></div>
+    </div>
+<div class="card" onclick="openLb(4)">
+      <img class="card-img" src="Sharing%20Design/April/Week%201/AI%20concepts.png" alt="AI Concepts" loading="lazy">
+      <div class="card-overlay"><div class="card-overlay-icon">&#9654;</div></div>
+      <div class="card-meta"><div class="card-title">AI Concepts</div><div class="card-desc">AI search component explorations</div></div>
+    </div>
+<div class="card" onclick="openLb(5)">
+      <img class="card-img" src="Sharing%20Design/April/Week%201/AI%20Prototyping.png" alt="AI Prototyping" loading="lazy">
+      <div class="card-overlay"><div class="card-overlay-icon">&#9654;</div></div>
+      <div class="card-meta"><div class="card-title">AI Prototyping</div><div class="card-desc">Vibe-coded prototype for design team</div></div>
+    </div>
+<div class="card" onclick="openLb(6)">
+      <img class="card-img" src="Sharing%20Design/April/Week%201/Air%20Recommendation%20Engine.png" alt="Air Recommendation Engine" loading="lazy">
+      <div class="card-overlay"><div class="card-overlay-icon">&#9654;</div></div>
+      <div class="card-meta"><div class="card-title">Air Recommendation Engine</div><div class="card-desc">Personalized flight recommendations</div></div>
+    </div>
+<div class="card" onclick="openLb(7)">
+      <img class="card-img" src="Sharing%20Design/April/Week%201/Approval%20dashboard.png" alt="Approval Dashboard" loading="lazy">
+      <div class="card-overlay"><div class="card-overlay-icon">&#9654;</div></div>
+      <div class="card-meta"><div class="card-title">Approval Dashboard</div><div class="card-desc">Full approval workflow design</div></div>
+    </div>
+<div class="card" onclick="openLb(8)">
+      <img class="card-img" src="Sharing%20Design/April/Week%201/Express%20Trips%20Page%20Exchanges%20and%20Cancellations.png" alt="Express Trips Page" loading="lazy">
+      <div class="card-overlay"><div class="card-overlay-icon">&#9654;</div></div>
+      <div class="card-meta"><div class="card-title">Express Trips Page</div><div class="card-desc">Exchanges and Cancellations</div></div>
+    </div>
+<div class="card" onclick="openLb(9)">
+      <img class="card-img" src="Sharing%20Design/April/Week%201/Improve%20Adoption%20of%20Templates%20%26%20Support%20for%20Template-Free%20Event%20Creation.png" alt="Template Adoption" loading="lazy">
+      <div class="card-overlay"><div class="card-overlay-icon">&#9654;</div></div>
+      <div class="card-meta"><div class="card-title">Template Adoption</div><div class="card-desc">Template-free event creation</div></div>
+    </div>
+<div class="card" onclick="openLb(10)">
+      <img class="card-img" src="Sharing%20Design/April/Week%201/Integrations%20Self%20Serve.png" alt="Integrations Self Serve" loading="lazy">
+      <div class="card-overlay"><div class="card-overlay-icon">&#9654;</div></div>
+      <div class="card-meta"><div class="card-title">Integrations Self Serve</div><div class="card-desc">Self-serve integration configurations</div></div>
+    </div>
+<div class="card" onclick="openLb(11)">
+      <img class="card-img" src="Sharing%20Design/April/Week%201/Invoice%20Config.png" alt="Invoice Config" loading="lazy">
+      <div class="card-overlay"><div class="card-overlay-icon">&#9654;</div></div>
+      <div class="card-meta"><div class="card-title">Invoice Config</div><div class="card-desc">Self-serve invoice configuration</div></div>
+    </div>
+<div class="card" onclick="openLb(12)">
+      <img class="card-img" src="Sharing%20Design/April/Week%201/Invoice%20templates.png" alt="Invoice Templates" loading="lazy">
+      <div class="card-overlay"><div class="card-overlay-icon">&#9654;</div></div>
+      <div class="card-meta"><div class="card-title">Invoice Templates</div><div class="card-desc">Scalable invoice framework</div></div>
+    </div>
+<div class="card" onclick="openLb(13)">
+      <img class="card-img" src="Sharing%20Design/April/Week%201/Marriott%20application%20approval%20dashboard.png" alt="Marriott Approval Dashboard" loading="lazy">
+      <div class="card-overlay"><div class="card-overlay-icon">&#9654;</div></div>
+      <div class="card-meta"><div class="card-title">Marriott Approval Dashboard</div><div class="card-desc">Application approval for Business Access</div></div>
+    </div>
+<div class="card" onclick="openLb(14)">
+      <img class="card-img" src="Sharing%20Design/April/Week%201/no%20app.png" alt="No App is Good App" loading="lazy">
+      <div class="card-overlay"><div class="card-overlay-icon">&#9654;</div></div>
+      <div class="card-meta"><div class="card-title">No App is Good App</div><div class="card-desc">Meeting users where they already are</div></div>
+    </div>
+<div class="card" onclick="openLb(15)">
+      <img class="card-img" src="Sharing%20Design/April/Week%201/Policy%20Revamp.png" alt="Policy Revamp" loading="lazy">
+      <div class="card-overlay"><div class="card-overlay-icon">&#9654;</div></div>
+      <div class="card-meta"><div class="card-title">Policy Revamp</div><div class="card-desc">Flexible rule builder with simulator</div></div>
+    </div>
+<div class="card" onclick="openLb(16)">
+      <img class="card-img" src="Sharing%20Design/April/Week%201/Pre-approvals.png" alt="Pre-approvals" loading="lazy">
+      <div class="card-overlay"><div class="card-overlay-icon">&#9654;</div></div>
+      <div class="card-meta"><div class="card-title">Pre-approvals</div><div class="card-desc">Complete pre-approval workflow</div></div>
+    </div>
+<div class="card" onclick="openLb(17)">
+      <img class="card-img" src="Sharing%20Design/April/Week%201/Qantas%20updates.png" alt="Qantas Updates" loading="lazy">
+      <div class="card-overlay"><div class="card-overlay-icon">&#9654;</div></div>
+      <div class="card-meta"><div class="card-title">Qantas Updates</div><div class="card-desc">Checkout updates for hotel and car</div></div>
+    </div>
+<div class="card" onclick="openLb(18)">
+      <img class="card-img" src="Sharing%20Design/April/Week%201/Rail%20booking%20type%20updates.png" alt="Rail Booking Updates" loading="lazy">
+      <div class="card-overlay"><div class="card-overlay-icon">&#9654;</div></div>
+      <div class="card-meta"><div class="card-title">Rail Booking Updates</div><div class="card-desc">Seat map and passenger details</div></div>
+    </div>
+<div class="card" onclick="openLb(19)">
+      <img class="card-img" src="Sharing%20Design/April/Week%201/Relevant%20contacts%20%28for%20a%20trip%29%20functionality.png" alt="Relevant Trip Contacts" loading="lazy">
+      <div class="card-overlay"><div class="card-overlay-icon">&#9654;</div></div>
+      <div class="card-meta"><div class="card-title">Relevant Trip Contacts</div><div class="card-desc">Trip contacts and details modal</div></div>
+    </div>
+<div class="card" onclick="openLb(20)">
+      <img class="card-img" src="Sharing%20Design/April/Week%201/Research%20and%20conceptual%20designs%20for%20hotel%20listing%20and%20hotel%20details%20page.png" alt="Hotel Listing Research" loading="lazy">
+      <div class="card-overlay"><div class="card-overlay-icon">&#9654;</div></div>
+      <div class="card-meta"><div class="card-title">Hotel Listing Research</div><div class="card-desc">Hotel listing and details concepts</div></div>
+    </div>
+<div class="card" onclick="openLb(21)">
+      <img class="card-img" src="Sharing%20Design/April/Week%201/Search%20component_01.png" alt="Search Component" loading="lazy">
+      <div class="card-overlay"><div class="card-overlay-icon">&#9654;</div></div>
+      <div class="card-meta"><div class="card-title">Search Component</div><div class="card-desc">Unified search across all booking types</div></div>
+    </div>
+<div class="card" onclick="openLb(22)">
+      <img class="card-img" src="Sharing%20Design/April/Week%201/Search%20component_02.png" alt="Search Component Design System" loading="lazy">
+      <div class="card-overlay"><div class="card-overlay-icon">&#9654;</div></div>
+      <div class="card-meta"><div class="card-title">Search Component Design System</div><div class="card-desc">Design system for new search</div></div>
+    </div>
+<div class="card" onclick="openLb(23)">
+      <img class="card-img" src="Sharing%20Design/April/Week%201/Seatmap.png" alt="Seatmap" loading="lazy">
+      <div class="card-overlay"><div class="card-overlay-icon">&#9654;</div></div>
+      <div class="card-meta"><div class="card-title">Seatmap</div><div class="card-desc">Accurate aircraft-specific seat layouts</div></div>
+    </div>
+<div class="card" onclick="openLb(24)">
+      <img class="card-img" src="Sharing%20Design/April/Week%201/Spotnana%20%20UX%20research%20platform.png" alt="UX Research Platform" loading="lazy">
+      <div class="card-overlay"><div class="card-overlay-icon">&#9654;</div></div>
+      <div class="card-meta"><div class="card-title">UX Research Platform</div><div class="card-desc">AI-powered research evidence hub</div></div>
+    </div>
+<div class="card" onclick="openLb(25)">
+      <img class="card-img" src="Sharing%20Design/April/Week%201/Trip%20Activity%20panel%20for%20Agents.png" alt="Trip Activity Panel" loading="lazy">
+      <div class="card-overlay"><div class="card-overlay-icon">&#9654;</div></div>
+      <div class="card-meta"><div class="card-title">Trip Activity Panel</div><div class="card-desc">Consolidated agent console</div></div>
+    </div>
+<div class="card" onclick="openLb(26)">
+      <img class="card-img" src="Sharing%20Design/April/Week%201/Trip%20details.png" alt="Trip Details Revamp" loading="lazy">
+      <div class="card-overlay"><div class="card-overlay-icon">&#9654;</div></div>
+      <div class="card-meta"><div class="card-title">Trip Details Revamp</div><div class="card-desc">Unified design across all booking types</div></div>
+    </div>
+    </div>
+  </div>
+
+</div><!-- /.site -->
+
+<div id="lightbox">
+  <div id="lb-close" onclick="closeLb()">&#x2715;</div>
+  <div id="lb-prev" class="lb-btn" onclick="navigate(-1)">&#8592;</div>
+  <div id="lb-next" class="lb-btn" onclick="navigate(1)">&#8594;</div>
+  <div class="lb-inner">
+    <img id="lb-img" src="" alt="">
+    <div class="lb-meta">
+      <div class="lb-title" id="lb-title"></div>
+      <div class="lb-desc" id="lb-desc"></div>
+      <div class="lb-counter" id="lb-counter"></div>
+    </div>
+  </div>
+  <div class="lb-keys">Use arrow keys to navigate · Esc to close</div>
+</div>
+
+<!-- VOICE UI MODAL -->
+<div id="voice-modal" onclick="if(event.target===this)this.style.display='none'" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.88);align-items:center;justify-content:center;backdrop-filter:blur(12px);">
+  <div style="position:relative;">
+    <div class="shell">
+
+  <!-- Dynamic Island -->
+  <div class="island" id="island">
+    <div class="island-dot"></div>
+    <div class="island-wave">
+      <span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+
+  <!-- Status Bar -->
+  <div class="status">
+    <span class="status-time">9:41</span>
+    <div class="status-icons">
+      <svg width="17" height="12" viewBox="0 0 17 12" fill="white"><rect x="0" y="3" width="3" height="9" rx="1" opacity="0.4"/><rect x="4.5" y="2" width="3" height="10" rx="1" opacity="0.6"/><rect x="9" y="0.5" width="3" height="11.5" rx="1"/><rect x="13.5" y="0" width="3" height="9" rx="1" opacity="0.3"/></svg>
+      <svg width="16" height="12" viewBox="0 0 16 12" fill="none"><path d="M8 2.5C10.2 2.5 12.1 3.5 13.4 5L15 3.3C13.2 1.3 10.7 0 8 0C5.3 0 2.8 1.3 1 3.3L2.6 5C3.9 3.5 5.8 2.5 8 2.5Z" fill="white"/><path d="M8 5.5C9.5 5.5 10.8 6.2 11.7 7.2L13.3 5.5C11.9 4 10.1 3 8 3C5.9 3 4.1 4 2.7 5.5L4.3 7.2C5.2 6.2 6.5 5.5 8 5.5Z" fill="white" opacity="0.7"/><circle cx="8" cy="10" r="2" fill="white"/></svg>
+      <svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="21" height="11" rx="3.5" stroke="white" stroke-opacity="0.35"/><rect x="2" y="2" width="16" height="8" rx="2" fill="white"/><path d="M23 4.5V7.5C23.8 7.2 24.5 6.7 24.5 6C24.5 5.3 23.8 4.8 23 4.5Z" fill="white" opacity="0.4"/></svg>
+    </div>
+  </div>
+
+  <!-- STATE: IDLE -->
+  <div class="screen" id="state-idle">
+    <div class="idle-greeting">Good morning, David</div>
+    <div class="idle-prompt">What do you<br>need today?</div>
+    <div class="idle-orb" id="idleOrb">
+      <svg viewBox="0 0 28 28" fill="none">
+        <path d="M14 4C14 4 14 4 14 4C11.2 4 9 6.2 9 9V15C9 17.8 11.2 20 14 20C16.8 20 19 17.8 19 15V9C19 6.2 16.8 4 14 4Z" fill="white" opacity="0.9"/>
+        <path d="M6 14C6 14 6 18 10 21C12 22.4 14 22.5 14 22.5C14 22.5 16 22.4 18 21C22 18 22 14 22 14" stroke="white" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
+        <line x1="14" y1="22.5" x2="14" y2="26" stroke="white" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
+        <line x1="10" y1="26" x2="18" y2="26" stroke="white" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+      </svg>
+    </div>
+    <div class="idle-hint">Tap to speak</div>
+  </div>
+
+  <!-- STATE: LISTENING -->
+  <div class="screen hidden" id="state-listening">
+    <div class="listen-container">
+      <div class="waveform-wrap">
+        <canvas id="waveCanvas"></canvas>
+      </div>
+      <div class="listen-label">Listening</div>
+      <div class="listen-transcript" id="transcript">
+        <span id="transcriptText"></span><span class="typed-cursor"></span>
+      </div>
+      <div class="listen-cancel" id="cancelBtn">Cancel</div>
+    </div>
+  </div>
+
+  <!-- STATE: RESPONDING -->
+  <div class="screen hidden" id="state-responding">
+    <div style="width:100%">
+      <div class="response-context">Flight request</div>
+      <div class="response-query">"Book me on the next flight to Chicago"</div>
+      <div class="response-divider"></div>
+      <div class="response-text">
+        I found two options<br>for Thursday morning.
+      </div>
+      <div class="response-cards">
+        <div class="r-card">
+          <div class="r-card-left">
+            <div class="r-card-label">United Airlines</div>
+            <div class="r-card-value">UA 492 &nbsp;&#183;&nbsp; 6:05am</div>
+            <div class="r-card-sub">Economy Plus &nbsp;&#183;&nbsp; Aisle 12C &nbsp;&#183;&nbsp; $287</div>
+          </div>
+          <span class="r-card-badge badge-green">Policy</span>
+        </div>
+        <div class="r-card">
+          <div class="r-card-left">
+            <div class="r-card-label">American Airlines</div>
+            <div class="r-card-value">AA 318 &nbsp;&#183;&nbsp; 7:20am</div>
+            <div class="r-card-sub">Main Cabin &nbsp;&#183;&nbsp; Middle &nbsp;&#183;&nbsp; $241</div>
+          </div>
+          <span class="r-card-badge badge-grey">Policy</span>
+        </div>
+      </div>
+      <div class="respond-actions">
+        <button class="btn-confirm" id="confirmBtn">Book UA 492</button>
+        <button class="btn-ghost-action" id="editBtn">Change</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mic Button -->
+  <div class="mic-bar">
+    <div class="mic-btn" id="micBtn">
+      <svg viewBox="0 0 22 28" fill="none">
+        <path d="M11 2C11 2 11 2 11 2C8.8 2 7 3.8 7 6V14C7 16.2 8.8 18 11 18C13.2 18 15 16.2 15 14V6C15 3.8 13.2 2 11 2Z" fill="#000"/>
+        <path d="M3 12C3 12 3 17 8 20C9.6 21.1 11 21.2 11 21.2C11 21.2 12.4 21.1 14 20C19 17 19 12 19 12" stroke="#000" stroke-width="1.8" stroke-linecap="round"/>
+        <line x1="11" y1="21.2" x2="11" y2="25" stroke="#000" stroke-width="1.8" stroke-linecap="round"/>
+        <line x1="7.5" y1="25" x2="14.5" y2="25" stroke="#000" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>
+    </div>
+  </div>
+
+  <div class="home-indicator"></div>
+  <div class="demo-hint">Tap mic to cycle states</div>
+
+</div>
+    <button onclick="document.getElementById('voice-modal').style.display='none'" style="position:absolute;top:-40px;right:0;background:none;border:none;color:rgba(255,255,255,0.5);font-size:13px;cursor:pointer;font-family:sans-serif;">Close &times;</button>
+  </div>
+</div>
+<script>
+(function() {
+  // Voice UI
+  var voiceStates = ['idle', 'listening', 'responding'];
+  var voiceCurrent = 0;
+  var waveAnimId = null;
+  var typeInterval = null;
+
+  function goTo(name) {
+    ['idle','listening','responding'].forEach(function(s) {
+      var el = document.getElementById('state-' + s);
+      if (el) el.classList.toggle('hidden', s !== name);
+    });
+    var island = document.getElementById('island');
+    var micBtn = document.getElementById('micBtn');
+    if (name === 'listening') {
+      if (island) island.classList.add('listening');
+      if (micBtn) micBtn.classList.add('active');
+      startWave();
+      typeTranscript();
+    } else {
+      if (island) island.classList.remove('listening');
+      if (micBtn) micBtn.classList.remove('active');
+      stopWave();
+    }
+    voiceCurrent = voiceStates.indexOf(name);
+  }
+
+  window.openVoiceUI = function() {
+    var m = document.getElementById('voice-modal');
+    if (m) m.style.display = 'flex';
+  };
+
+  // Gallery lightbox - reads from pre-rendered DOM
+  var lbCurrent = 0;
+
+  window.openLb = function(i) {
+    lbCurrent = i;
+    updateLb();
+    var lb = document.getElementById('lightbox');
+    if (lb) lb.classList.add('open');
+  };
+
+  window.closeLb = function() {
+    var lb = document.getElementById('lightbox');
+    if (lb) lb.classList.remove('open');
+  };
+
+  window.navigate = function(dir) {
+    var cards = document.querySelectorAll('#panel-gallery .card');
+    lbCurrent = (lbCurrent + dir + cards.length) % cards.length;
+    updateLb();
+  };
+
+  function updateLb() {
+    var cards = document.querySelectorAll('#panel-gallery .card');
+    if (!cards.length) return;
+    var card = cards[lbCurrent];
+    var img = card.querySelector('.card-img');
+    var title = card.querySelector('.card-title');
+    var desc = card.querySelector('.card-desc');
+    document.getElementById('lb-img').src = img ? img.src : '';
+    document.getElementById('lb-title').textContent = title ? title.textContent : '';
+    document.getElementById('lb-desc').textContent = desc ? desc.textContent : '';
+    document.getElementById('lb-counter').textContent = (lbCurrent + 1) + ' / ' + cards.length;
+  }
+
+  // Wave animation for voice UI
+  var canvas = document.getElementById('waveCanvas');
+  var ctx = canvas ? canvas.getContext('2d') : null;
+
+  function resizeCanvas() {
+    if (!canvas) return;
+    canvas.width = canvas.offsetWidth * window.devicePixelRatio;
+    canvas.height = canvas.offsetHeight * window.devicePixelRatio;
+    ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+  }
+
+  function drawWave() {
+    if (!ctx || !canvas) return;
+    var W = canvas.offsetWidth, H = canvas.offsetHeight;
+    ctx.clearRect(0, 0, W, H);
+    var cx = W/2, cy = H/2, t = Date.now()/1000;
+    var waves = [
+      {amp:38,freq:2.2,speed:1.1,alpha:0.9,color:'#0A84FF'},
+      {amp:24,freq:3.1,speed:0.8,alpha:0.45,color:'#40A0FF'},
+      {amp:14,freq:4.5,speed:1.6,alpha:0.25,color:'#80C8FF'}
+    ];
+    waves.forEach(function(w) {
+      ctx.beginPath();
+      ctx.strokeStyle = w.color;
+      ctx.globalAlpha = w.alpha;
+      ctx.lineWidth = 1.5;
+      for (var x = 0; x <= W; x++) {
+        var norm = (x/W)*Math.PI*w.freq*2;
+        var env = Math.sin((x/W)*Math.PI);
+        var y = cy + Math.sin(norm + t*w.speed)*w.amp*env;
+        x === 0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
+      }
+      ctx.stroke();
+    });
+    ctx.globalAlpha = 1;
+  }
+
+  function startWave() {
+    resizeCanvas();
+    function loop() { drawWave(); waveAnimId = requestAnimationFrame(loop); }
+    loop();
+  }
+
+  function stopWave() {
+    if (waveAnimId) { cancelAnimationFrame(waveAnimId); waveAnimId = null; }
+    if (ctx && canvas) ctx.clearRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
+  }
+
+  var phrases = [
+    'Book me on the next flight',
+    'Book me on the next flight to',
+    'Book me on the next flight to Chicago'
+  ];
+
+  function typeTranscript() {
+    var el = document.getElementById('transcriptText');
+    if (!el) return;
+    el.textContent = '';
+    var pIdx = 0, cIdx = 0;
+    if (typeInterval) clearInterval(typeInterval);
+    typeInterval = setInterval(function() {
+      if (pIdx >= phrases.length) { clearInterval(typeInterval); return; }
+      var target = phrases[pIdx];
+      if (cIdx < target.length) { el.textContent = target.slice(0, ++cIdx); }
+      else {
+        pIdx++;
+        cIdx = pIdx < phrases.length ? phrases[pIdx-1].length : cIdx;
+        if (pIdx >= phrases.length) {
+          clearInterval(typeInterval);
+          setTimeout(function() { if (voiceStates[voiceCurrent]==='listening') goTo('responding'); }, 1200);
+        }
+      }
+    }, 55);
+  }
+
+  window.onload = function() {
+    // Keyboard nav for lightbox
+    document.addEventListener('keydown', function(e) {
+      var lb = document.getElementById('lightbox');
+      if (!lb || !lb.classList.contains('open')) return;
+      if (e.key === 'ArrowRight') navigate(1);
+      if (e.key === 'ArrowLeft') navigate(-1);
+      if (e.key === 'Escape') closeLb();
+    });
+    var lb = document.getElementById('lightbox');
+    if (lb) lb.addEventListener('click', function(e) { if (e.target===this) closeLb(); });
+
+    // Voice UI init
+    var micBtn = document.getElementById('micBtn');
+    if (micBtn) {
+      micBtn.addEventListener('click', function() {
+        goTo(voiceStates[(voiceCurrent+1) % voiceStates.length]);
+      });
+    }
+    var idleOrb = document.getElementById('idleOrb');
+    if (idleOrb) idleOrb.addEventListener('click', function() { goTo('listening'); });
+    var cancelBtn = document.getElementById('cancelBtn');
+    if (cancelBtn) cancelBtn.addEventListener('click', function() { goTo('idle'); });
+    var confirmBtn = document.getElementById('confirmBtn');
+    if (confirmBtn) confirmBtn.addEventListener('click', function() { goTo('idle'); });
+    var editBtn = document.getElementById('editBtn');
+    if (editBtn) editBtn.addEventListener('click', function() { goTo('listening'); });
+  };
+})();
+</script>
+
+</body>
+</html>
